@@ -6,6 +6,7 @@ import com.maxmerino.appnotes_maxmerino.model.Nota;
 import java.io.IOException;
 import java.time.LocalDate;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 
@@ -23,8 +24,14 @@ public class SecondaryController {
     ListView llistaNotes;
     
     @FXML
+    Button botoEsborrar;
+    @FXML
+    Button botoModificar;
+    
+    @FXML
     private void initialize(){
-        
+        botoEsborrar.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
+        botoModificar.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
         labelId.setText(String.valueOf(model.getId_usuari()));
         actualitzarVistaNotes();
     }
@@ -80,4 +87,6 @@ public class SecondaryController {
             System.out.println();
         }
     }
+    
+    
 }
