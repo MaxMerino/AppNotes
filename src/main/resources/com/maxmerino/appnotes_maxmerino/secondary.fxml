@@ -8,11 +8,10 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.maxmerino.appnotes_maxmerino.SecondaryController">
    <children>
       <Label fx:id="labelId" layoutX="14.0" layoutY="370.0" text="Label" />
-      <ListView fx:id="llistaNotes" layoutX="171.0" layoutY="90.0" prefHeight="200.0" prefWidth="200.0" />
+      <ListView fx:id="llistaNotes" layoutX="67.0" layoutY="42.0" prefHeight="336.0" prefWidth="279.0" />
       <Button layoutX="403.0" layoutY="97.0" mnemonicParsing="false" onAction="#afegirNota" text="Afegir" />
-      <Button layoutX="403.0" layoutY="137.0" mnemonicParsing="false" onAction="#esborrarNotes" text="Esborrar" />
-      <Button layoutX="401.0" layoutY="178.0" mnemonicParsing="false" onAction="#editarNota" text="Modificar" />
-      <Button layoutX="93.0" layoutY="366.0" mnemonicParsing="false" onAction="#tancarSessio" text="Tancar Sessió" />
-      <Button layoutX="397.0" layoutY="222.0" mnemonicParsing="false" onAction="#editarNota" text="Visualitzar" />
+      <Button fx:id="botoEsborrar" layoutX="403.0" layoutY="137.0" mnemonicParsing="false" onAction="#esborrarNotes" text="Esborrar" />
+      <Button fx:id="botoModificar" layoutX="401.0" layoutY="178.0" mnemonicParsing="false" onAction="#editarNota" text="Modificar" />
+      <Button layoutX="477.0" layoutY="18.0" mnemonicParsing="false" onAction="#tancarSessio" text="Tancar Sessió" />
    </children>
 </AnchorPane>
