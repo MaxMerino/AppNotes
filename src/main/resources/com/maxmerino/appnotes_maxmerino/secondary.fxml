@@ -11,33 +11,30 @@
    <children>
       <Label fx:id="labelId" layoutX="528.0" layoutY="68.0" text="Label" />
       <Button layoutX="477.0" layoutY="18.0" mnemonicParsing="false" onAction="#tancarSessio" text="Tancar Sessió" />
-      <TabPane layoutX="55.0" layoutY="12.0" prefHeight="384.0" prefWidth="402.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane layoutX="55.0" layoutY="12.0" prefHeight="384.0" prefWidth="325.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-          <Tab fx:id="tabTotesNotes" onSelectionChanged="#canviPestanya" text="Totes les Notes">
+          <Tab fx:id="tabTotesNotes" onSelectionChanged="#actualitzarLlistes" text="Totes les Notes">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ListView fx:id="llistaNotes" layoutX="14.0" layoutY="10.0" prefHeight="336.0" prefWidth="279.0" />
-                        <Button layoutX="317.0" layoutY="78.0" mnemonicParsing="false" onAction="#afegirNota" text="Afegir" />
-                        <Button fx:id="botoEsborrar" layoutX="310.0" layoutY="150.0" mnemonicParsing="false" onAction="#esborrarNotes" text="Esborrar" />
-                        <Button fx:id="botoModificar" layoutX="306.0" layoutY="114.0" mnemonicParsing="false" onAction="#editarNota" text="Modificar" />
+                        <ListView fx:id="llistaNotes" layoutX="14.0" layoutY="10.0" prefHeight="355.2" prefWidth="325.6" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
             </content>
           </Tab>
           <Tab text="Notes preferides">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="355.0" prefWidth="348.0">
                      <children>
-                        <ListView fx:id="llistaNotesPreferits" layoutX="14.0" layoutY="10.0" prefHeight="336.0" prefWidth="279.0" />
-                        <Button layoutX="317.0" layoutY="78.0" mnemonicParsing="false" text="Afegir" />
-                        <Button fx:id="botoEsborrarPreferit" layoutX="310.0" layoutY="150.0" mnemonicParsing="false" text="Esborrar" />
-                        <Button fx:id="botoModificarPreferit" layoutX="306.0" layoutY="114.0" mnemonicParsing="false" text="Modificar" />
+                        <ListView fx:id="llistaNotesPreferits" layoutX="14.0" layoutY="10.0" prefHeight="355.2" prefWidth="325.6" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
             </content>
           </Tab>
         </tabs>
       </TabPane>
+      <Button layoutX="500.0" layoutY="129.0" mnemonicParsing="false" onAction="#afegirNota" text="Afegir" />
+      <Button fx:id="botoEsborrar" layoutX="493.0" layoutY="204.0" mnemonicParsing="false" onAction="#esborrarNotes" text="Esborrar" />
+      <Button fx:id="botoModificar" layoutX="489.0" layoutY="170.0" mnemonicParsing="false" onAction="#editarNota" text="Modificar" />
    </children>
 </AnchorPane>

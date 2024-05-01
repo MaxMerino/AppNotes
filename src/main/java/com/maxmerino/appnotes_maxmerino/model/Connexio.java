@@ -4,6 +4,7 @@
  */
 package com.maxmerino.appnotes_maxmerino.model;
 
+import com.maxmerino.appnotes_maxmerino.SistemaAlerta;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -28,8 +29,8 @@ public class Connexio {
             Class.forName(DRIVER); 
             connexio = DriverManager.getConnection(URL, USER, PASSWD); 
         } catch (SQLException | ClassNotFoundException throwables) {
-            System.out.println("No hi ha connexió amb el servidor de Bases de Dades");
-            System.out.println(throwables.getMessage());
+            SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades");
+            
         }   
         return connexio;
     }

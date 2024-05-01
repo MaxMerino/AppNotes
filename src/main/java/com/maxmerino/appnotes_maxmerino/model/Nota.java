@@ -13,7 +13,8 @@ import java.time.LocalDate;
  */
 public class Nota {
     private int id = -1;
-    private String titol, contingut;
+    private String titol = "";
+    private String contingut = "";
     private boolean enEdicio = true;
     private boolean preferida = false;
     private LocalDate dataModificacio = LocalDate.now();
@@ -33,11 +34,7 @@ public class Nota {
         
     }
     
-    public Nota() {
-        this.titol = "";
-        this.contingut = "";
-        
-        
+    public Nota() { 
     }
     
     public void actualitzarData(){

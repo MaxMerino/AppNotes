@@ -48,7 +48,7 @@ public class Model {
 
     
     public boolean InsertarUsuari(Connection c, String nom, String correu, String contrasenya) {
-        if (!isBuit(nom) && !isBuit(correu) && !isBuit(contrasenya) && isValidEmailAddress(correu) ) {
+        if (!isBuit(nom) && !isBuit(correu) && !isBuit(contrasenya) && correuValid(correu) ) {
             try {
 
                 PreparedStatement ss = c.prepareStatement("SELECT COUNT(*) AS count FROM usuaris WHERE correu = ? OR nom = ?");
@@ -95,7 +95,7 @@ public class Model {
         int count = 0;
         int id_usuari = 0;
         String hash = "";
-        if (!isBuit(correu) && !isBuit(contrasenya) && isValidEmailAddress(correu)) {
+        if (!isBuit(correu) && !isBuit(contrasenya) && correuValid(correu)) {
             try {
                 PreparedStatement ss = c.prepareStatement("SELECT COUNT(*) AS count, id_usuari, contrasenya  FROM usuaris WHERE correu = ?");
                 ss.setString(1, correu);
@@ -146,7 +146,7 @@ public class Model {
         return cadena.length() == 0;
     }
     
-    public boolean isValidEmailAddress(String email) {
+    public boolean correuValid(String email) {
            String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
            java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
            java.util.regex.Matcher m = p.matcher(email);
@@ -205,7 +205,7 @@ public class Model {
             return notes;
             
         } catch (Exception ex) {
-            SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades"+ex.getMessage());
+            SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades");
             return notes;
         }
         

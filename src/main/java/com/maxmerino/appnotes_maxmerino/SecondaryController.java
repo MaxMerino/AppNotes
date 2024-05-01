@@ -29,15 +29,11 @@ public class SecondaryController {
     
     @FXML
     Button botoEsborrar;
-    
-    @FXML
-    Button botoEsborrarPreferit;
-    
+
     @FXML
     Button botoModificar;
     
-    @FXML
-    Button botoModificarPreferit;
+   
     
     @FXML
     Tab tabTotesNotes;
@@ -45,11 +41,11 @@ public class SecondaryController {
     @FXML
     private void initialize(){
         botoEsborrar.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
-        botoEsborrarPreferit.disableProperty().bind(llistaNotesPreferits.getSelectionModel().selectedItemProperty().isNull());
         botoModificar.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
-        botoModificarPreferit.disableProperty().bind(llistaNotesPreferits.getSelectionModel().selectedItemProperty().isNull());
+        
         labelId.setText(String.valueOf(model.getId_usuari()));
-        actualitzarVistaNotes();
+        llistaNotes.setItems(model.visualitzarNotes(connexio.connecta(),false));
+        
     }
     
     @FXML
@@ -59,44 +55,53 @@ public class SecondaryController {
     
     @FXML
     private void afegirNota(){
-        Nota notaNova = new Nota();
+        Nota notaNova = new Nota();;
+        if (!tabTotesNotes.isSelected()) {
+            notaNova.setPreferida(true);
+        }
         model.setNotaActual(notaNova);
         obrirPantallaEdicio();
-        
     }
     
     @FXML
     private void editarNota(){
-        Nota notaNova = (Nota)llistaNotes.getSelectionModel().getSelectedItem();
+        Nota notaNova;
+        if (tabTotesNotes.isSelected()) {
+            notaNova = (Nota)llistaNotes.getSelectionModel().getSelectedItem();
+        
+        }else{
+            notaNova = (Nota)llistaNotesPreferits.getSelectionModel().getSelectedItem();
+        }
         model.setNotaActual(notaNova);
         obrirPantallaEdicio();
-        
     }
      
     @FXML
     private void esborrarNotes(){
-        
-        model.esborrarNota(connexio.connecta(), (Nota)llistaNotes.getSelectionModel().getSelectedItem());
-        actualitzarVistaNotes();
-        
-    }
-    
-    @FXML
-    private void actualitzarVistaNotes(){
-        llistaNotes.setItems(model.visualitzarNotes(connexio.connecta(),false));
-    }
-    
-    @FXML
-    private void actualitzarVistaNotesPreferits(){
-        llistaNotesPreferits.setItems(model.visualitzarNotes(connexio.connecta(),true));
-    }
-    
-    @FXML
-    private void canviPestanya(){
         if (tabTotesNotes.isSelected()) {
-            actualitzarVistaNotes();
+            model.esborrarNota(connexio.connecta(), (Nota)llistaNotes.getSelectionModel().getSelectedItem());
         }else{
-            actualitzarVistaNotesPreferits();
+            model.esborrarNota(connexio.connecta(), (Nota)llistaNotesPreferits.getSelectionModel().getSelectedItem());
+        }
+        actualitzarLlistes();
+    }
+
+    @FXML
+    private void actualitzarLlistes(){
+        if (tabTotesNotes.isSelected()) {
+            llistaNotes.setItems(model.visualitzarNotes(connexio.connecta(),false));
+            if (botoEsborrar != null && botoModificar != null) {
+                botoEsborrar.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
+                botoModificar.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
+            }
+        }else{
+            
+            llistaNotesPreferits.setItems(model.visualitzarNotes(connexio.connecta(),true));
+            if (botoEsborrar != null && botoModificar != null) {
+                botoEsborrar.disableProperty().bind(llistaNotesPreferits.getSelectionModel().selectedItemProperty().isNull());
+                botoModificar.disableProperty().bind(llistaNotesPreferits.getSelectionModel().selectedItemProperty().isNull());
+            }
+            
         }
     }
     
