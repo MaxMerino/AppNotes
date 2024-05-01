@@ -5,7 +5,10 @@
 package com.maxmerino.appnotes_maxmerino.model;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -17,9 +20,9 @@ public class Nota {
     private String contingut = "";
     private boolean enEdicio = true;
     private boolean preferida = false;
-    private LocalDate dataModificacio = LocalDate.now();
+    private LocalDateTime dataModificacio = LocalDateTime.now();
 
-    public Nota(String titol, String contingut, boolean isEnEdicio, LocalDate dataModificacio, boolean preferida) {
+    public Nota(String titol, String contingut, boolean isEnEdicio, LocalDateTime dataModificacio, boolean preferida) {
         
         this.titol = titol;
         this.contingut = contingut;
@@ -28,7 +31,7 @@ public class Nota {
         this.preferida = preferida;
     }
     
-    public Nota(int id, String titol, String contingut, boolean isEnEdicio, LocalDate dataModificacio, boolean preferida) {
+    public Nota(int id, String titol, String contingut, boolean isEnEdicio, LocalDateTime dataModificacio, boolean preferida) {
         this(titol,contingut,isEnEdicio,dataModificacio,preferida);
         this.id = id;
         
@@ -38,11 +41,11 @@ public class Nota {
     }
     
     public void actualitzarData(){
-        dataModificacio = LocalDate.now();
+        dataModificacio = LocalDateTime.now();
     }
     
-    public Date getSqlData(){
-        return Date.valueOf(dataModificacio);
+    public Timestamp getSqlData(){
+        return Timestamp.valueOf(dataModificacio);
     }
 
     public String getTitol() {
@@ -79,7 +82,11 @@ public class Nota {
 
     @Override
     public String toString() {
-        return titol + "\n" + contingut;
+        String contingutVisualitzacio = contingut;
+        if (contingut.length() > 25) {
+            contingutVisualitzacio = contingut.substring(0,25)+"...";
+        }
+        return titol + "\n" + contingutVisualitzacio+"\n"+"Data Modificació: "+dataModificacio.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
     }
 
     public boolean isPreferida() {

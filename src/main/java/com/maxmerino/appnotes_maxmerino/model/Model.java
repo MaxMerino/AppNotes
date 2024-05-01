@@ -7,11 +7,12 @@ package com.maxmerino.appnotes_maxmerino.model;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.maxmerino.appnotes_maxmerino.SistemaAlerta;
 import java.sql.Connection;
-import java.sql.Date;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -157,7 +158,7 @@ public class Model {
         String titol = nota.getTitol();
         String contingut = nota.getContingut();
         boolean enEdicio = nota.isEnEdicio();
-        Date data = nota.getSqlData();
+        Timestamp data = nota.getSqlData();
         int idNota = 0;
         
         try {
@@ -166,7 +167,7 @@ public class Model {
             s.setString(1, titol);
             s.setString(2, contingut);
             s.setBoolean(3, enEdicio);
-            s.setDate(4, data);
+            s.setTimestamp(4, data);
             s.execute();
             
             s = c.prepareStatement("SELECT LAST_INSERT_ID() as id FROM notes");
@@ -199,7 +200,7 @@ public class Model {
             s.setInt(1, id_usuari);
             ResultSet resultat = s.executeQuery();
             while (resultat.next()) {
-                Nota notaTupla = new Nota(resultat.getInt("id_nota"),resultat.getString("titol"),resultat.getString("contingut"),resultat.getBoolean("is_en_edicio"),resultat.getDate("data_modificacio").toLocalDate(),resultat.getBoolean("is_preferida"));
+                Nota notaTupla = new Nota(resultat.getInt("id_nota"),resultat.getString("titol"),resultat.getString("contingut"),resultat.getBoolean("is_en_edicio"),resultat.getTimestamp("data_modificacio").toLocalDateTime(),resultat.getBoolean("is_preferida"));
                 notes.add(notaTupla);
             }
             return notes;
@@ -240,13 +241,14 @@ public class Model {
     }
     
     public void modificarNota(Connection c, Nota nota, boolean preferida){
-        //TODO: Programar preferida, data i en edicio
+        //TODO: Programar data i en edicio
         PreparedStatement s;
         try {
             s = c.prepareStatement("UPDATE notes SET titol = ?, contingut = ?, data_modificacio= ? WHERE id_nota = ?");
             s.setString(1, nota.getTitol());
             s.setString(2, nota.getContingut());
-            s.setDate(3, nota.getSqlData());
+            nota.actualitzarData();
+            s.setTimestamp(3, nota.getSqlData());
             s.setInt(4, nota.getId());
             s.execute();
             
