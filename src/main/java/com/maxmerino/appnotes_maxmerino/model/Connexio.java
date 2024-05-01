@@ -29,6 +29,7 @@ public class Connexio {
             connexio = DriverManager.getConnection(URL, USER, PASSWD); 
         } catch (SQLException | ClassNotFoundException throwables) {
             System.out.println("No hi ha connexió amb el servidor de Bases de Dades");
+            System.out.println(throwables.getMessage());
         }   
         return connexio;
     }

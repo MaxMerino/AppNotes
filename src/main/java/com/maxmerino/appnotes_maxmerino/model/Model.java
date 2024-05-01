@@ -5,6 +5,7 @@
 package com.maxmerino.appnotes_maxmerino.model;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import com.maxmerino.appnotes_maxmerino.SistemaAlerta;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -112,7 +113,7 @@ public class Model {
                         return id_usuari;
                     } 
                 } 
-            } catch (SQLException ex) {
+            } catch (Exception ex) {
                 
                 return -1;
             }
@@ -155,7 +156,7 @@ public class Model {
     public void afegirNota(Connection c, Nota nota, boolean preferida){
         String titol = nota.getTitol();
         String contingut = nota.getContingut();
-        boolean enEdicio = nota.isIsEnEdicio();
+        boolean enEdicio = nota.isEnEdicio();
         Date data = nota.getSqlData();
         int idNota = 0;
         
@@ -180,26 +181,31 @@ public class Model {
             s.setBoolean(3, preferida);
             
             s.execute();
-        } catch (SQLException ex) {
-            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades");
         }
     }
     
-    public ObservableList<Nota> visualitzarNotes(Connection c){
+    public ObservableList<Nota> visualitzarNotes(Connection c, boolean nomesPreferides){
         ObservableList<Nota> notes = FXCollections.observableArrayList();
         PreparedStatement s;
         try {
-            s = c.prepareStatement("SELECT notes.id_nota, titol, contingut, is_en_edicio, data_modificacio FROM notes INNER JOIN notes_usuaris ON notes.id_nota = notes_usuaris.id_nota WHERE id_usuari = ?");
+            String consultaBase = "SELECT notes.id_nota, titol, contingut, is_en_edicio, data_modificacio, is_preferida FROM notes INNER JOIN notes_usuaris ON notes.id_nota = notes_usuaris.id_nota WHERE id_usuari = ?";
+            if (nomesPreferides) {
+                s = c.prepareStatement(consultaBase+" AND is_preferida");
+            }else{
+                s = c.prepareStatement(consultaBase);
+            }
             s.setInt(1, id_usuari);
             ResultSet resultat = s.executeQuery();
             while (resultat.next()) {
-                Nota notaTupla = new Nota(resultat.getInt("id_nota"),resultat.getString("titol"),resultat.getString("contingut"),resultat.getBoolean("is_en_edicio"),resultat.getDate("data_modificacio").toLocalDate());
+                Nota notaTupla = new Nota(resultat.getInt("id_nota"),resultat.getString("titol"),resultat.getString("contingut"),resultat.getBoolean("is_en_edicio"),resultat.getDate("data_modificacio").toLocalDate(),resultat.getBoolean("is_preferida"));
                 notes.add(notaTupla);
             }
             return notes;
             
-        } catch (SQLException ex) {
-            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades"+ex.getMessage());
             return notes;
         }
         
@@ -227,8 +233,8 @@ public class Model {
                 s.execute();
             }
             
-        } catch (SQLException ex) {
-            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades");
         }
             
     }
@@ -243,8 +249,14 @@ public class Model {
             s.setDate(3, nota.getSqlData());
             s.setInt(4, nota.getId());
             s.execute();
-        } catch (SQLException ex) {
-            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+            
+            s = c.prepareStatement("UPDATE notes_usuaris SET is_preferida = ? WHERE id_usuari = ? AND id_nota = ?");
+            s.setBoolean(1, preferida);
+            s.setInt(2, id_usuari);
+            s.setInt(3, nota.getId());
+            s.execute();
+        } catch (Exception ex) {
+            SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades");
         }
     }
     

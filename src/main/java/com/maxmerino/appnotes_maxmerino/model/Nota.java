@@ -14,19 +14,21 @@ import java.time.LocalDate;
 public class Nota {
     private int id = -1;
     private String titol, contingut;
-    private boolean isEnEdicio;
+    private boolean enEdicio = true;
+    private boolean preferida = false;
     private LocalDate dataModificacio = LocalDate.now();
 
-    public Nota(String titol, String contingut, boolean isEnEdicio, LocalDate dataModificacio) {
+    public Nota(String titol, String contingut, boolean isEnEdicio, LocalDate dataModificacio, boolean preferida) {
         
         this.titol = titol;
         this.contingut = contingut;
-        this.isEnEdicio = isEnEdicio;
+        this.enEdicio = isEnEdicio;
         this.dataModificacio = dataModificacio;
+        this.preferida = preferida;
     }
     
-    public Nota(int id, String titol, String contingut, boolean isEnEdicio, LocalDate dataModificacio) {
-        this(titol,contingut,isEnEdicio,dataModificacio);
+    public Nota(int id, String titol, String contingut, boolean isEnEdicio, LocalDate dataModificacio, boolean preferida) {
+        this(titol,contingut,isEnEdicio,dataModificacio,preferida);
         this.id = id;
         
     }
@@ -34,7 +36,7 @@ public class Nota {
     public Nota() {
         this.titol = "";
         this.contingut = "";
-        this.isEnEdicio = true;
+        
         
     }
     
@@ -62,12 +64,12 @@ public class Nota {
         this.contingut = contingut;
     }
 
-    public boolean isIsEnEdicio() {
-        return isEnEdicio;
+    public boolean isEnEdicio() {
+        return enEdicio;
     }
 
-    public void setIsEnEdicio(boolean isEnEdicio) {
-        this.isEnEdicio = isEnEdicio;
+    public void setEnEdicio(boolean enEdicio) {
+        this.enEdicio = enEdicio;
     }
 
     public int getId() {
@@ -81,6 +83,14 @@ public class Nota {
     @Override
     public String toString() {
         return titol + "\n" + contingut;
+    }
+
+    public boolean isPreferida() {
+        return preferida;
+    }
+
+    public void setPreferida(boolean preferida) {
+        this.preferida = preferida;
     }
     
     

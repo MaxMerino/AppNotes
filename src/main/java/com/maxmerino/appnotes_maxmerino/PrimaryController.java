@@ -46,13 +46,13 @@ public class PrimaryController {
         if (resultat) {
             
             int idSessio = model.ComprovarUsuari(connexio.connecta(), regCorreu.getText(), regContrasenya.getText());
-            alerta("Compte creat correctament");
+            SistemaAlerta.alerta("Compte creat correctament");
             model.setId_usuari(idSessio);
             
             canviarPantalla();
             
         }else{
-            alerta("Compte no creat");
+            SistemaAlerta.alerta("Compte no creat");
         }
     }
     
@@ -60,33 +60,23 @@ public class PrimaryController {
     public void iniciarSessio(){
         int idSessio = model.ComprovarUsuari(connexio.connecta(), inCorreu.getText(), inContrasenya.getText());
         if (idSessio != -1) {
-            alerta("Credencials vàlides!");
+            SistemaAlerta.alerta("Credencials vàlides!");
             model.setId_usuari(idSessio);
             canviarPantalla();
         }else{
-            alerta("Credencials invàlides!");
+            SistemaAlerta.alerta("Credencials invàlides!");
         }
     }
     
     
     
-    @FXML
-    private void alerta(String text){
-        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
-        alerta.setHeaderText(null);
-        alerta.setTitle("Informació");
-        alerta.setContentText(text);
-        Stage stage = (Stage) alerta.getDialogPane().getScene().getWindow();
-        stage.setAlwaysOnTop(true);
-        alerta.show();
-    }
     
     @FXML
     private void canviarPantalla(){
         try {
             App.setRoot("secondary");
         } catch (IOException ex) {
-            alerta("Error!");
+            SistemaAlerta.alerta("Error!");
         }
     }
     

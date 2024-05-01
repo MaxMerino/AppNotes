@@ -6,6 +6,7 @@ import com.maxmerino.appnotes_maxmerino.model.Nota;
 import java.io.IOException;
 import java.time.LocalDate;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -22,14 +23,18 @@ public class EdicioNotesController {
     TextField titol;
     @FXML
     TextArea contingut;
+    
     Nota notaActual; 
+    
+    @FXML
+    CheckBox checkboxPreferida;
     
     @FXML
     public void initialize(){
         notaActual = model.getNotaActual();
         titol.setText(notaActual.getTitol());
         contingut.setText(notaActual.getContingut());
-        
+        checkboxPreferida.setSelected(notaActual.isPreferida());
     }
     
     @FXML
@@ -38,9 +43,9 @@ public class EdicioNotesController {
         
         if(notaActual.getId() == -1) {
             
-            model.afegirNota(connexio.connecta(), notaActual, true);
+            model.afegirNota(connexio.connecta(), notaActual, checkboxPreferida.isSelected());
         }else{
-            model.modificarNota(connexio.connecta(), notaActual, true);
+            model.modificarNota(connexio.connecta(), notaActual, checkboxPreferida.isSelected());
         }
         
         sortirEdicio();
@@ -56,7 +61,7 @@ public class EdicioNotesController {
          try {
             App.setRoot("secondary");
         } catch (IOException ex) {
-            System.out.println();
+            SistemaAlerta.alerta("Error!");
         }
     }
     

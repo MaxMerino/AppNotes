@@ -1,0 +1,57 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 30 d’abr. 2024, 13:26:40
+    Author     : alumne
+*/
+
+/* estil.css */
+
+.root {
+    -fx-background-color: #f5f5f5; /* Fons més clar */
+}
+
+.label {
+    -fx-text-fill: #333; /* Text més fosc */
+    -fx-font-size: 16px; /* Mida de la font lleugerament més gran */
+}
+
+.list-view {
+    -fx-background-color: #fff; /* Fons blanc */
+    -fx-border-color: #ccc; /* Contorn */
+    -fx-border-width: 1px; 
+    -fx-border-radius: 5px; /* Arrodoniment més pronunciat */
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 10, 0, 0, 1 ); /* Ombra suau */
+}
+
+.button {
+    -fx-background-color: #2196F3; /* Blau segons Material Design */
+    -fx-text-fill: #fff; 
+    -fx-font-size: 14px;
+    -fx-border-radius: 5px; /* Botons més arrodonits */
+    -fx-background-radius: 5px;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 10, 0, 0, 1 ); 
+}
+
+.button:hover {
+    -fx-background-color: #0d47a1; /* Blau més fosc al passar el ratolí */
+}
+
+.text-field, .password-field, .text-area {
+    -fx-background-color: #fff; 
+    -fx-border-color: #ccc; 
+    -fx-border-width: 1px; 
+    -fx-border-radius: 5px; /* Contorns més suaus */
+    -fx-background-radius: 5px; 
+    -fx-font-size: 14px; 
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 10, 0, 0, 1 ); 
+}
+
+.checkbox {
+    -fx-text-fill: #333; 
+    -fx-font-size: 14px; 
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 10, 0, 0, 1 ); 
+}
