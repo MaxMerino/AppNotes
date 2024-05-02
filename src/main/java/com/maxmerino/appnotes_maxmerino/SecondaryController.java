@@ -37,7 +37,7 @@ public class SecondaryController {
     @FXML
     Button botoCompartir;
     @FXML
-    TextField textCategoria;
+    TextField textEtiqueta;
     
    
     
@@ -63,10 +63,10 @@ public class SecondaryController {
     @FXML
     private void afegirNota(){
         Nota notaNova = new Nota();;
-        if (!tabTotesNotes.isSelected()) {
-            notaNova.setPreferida(true);
-        }
+        
+        notaNova = model.afegirNota(connexio.connecta(), notaNova, !tabTotesNotes.isSelected());
         model.setNotaActual(notaNova);
+        
         obrirPantallaEdicio();
     }
     
@@ -141,12 +141,23 @@ public class SecondaryController {
         }
     }
     @FXML 
-    private void crearCategoria(){
-        if(textCategoria.getText().length() > 0){
-            model.afegirCategoria(connexio.connecta(), textCategoria.getText());
+    private void crearEtiqueta(){
+        if(textEtiqueta.getText().length() > 0){
+            model.afegirEtiqueta(connexio.connecta(), textEtiqueta.getText());
+            textEtiqueta.setText("");
+            actualitzarLlistes();
         }
         
     }
     
+    @FXML 
+    private void eliminarEtiqueta(){
+        if(textEtiqueta.getText().length() > 0){
+            model.esborrarEtiquetaTotalment(connexio.connecta(), textEtiqueta.getText());
+            textEtiqueta.setText("");
+            actualitzarLlistes();
+        }
+        
+    }
     
 }

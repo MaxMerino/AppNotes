@@ -33,9 +33,9 @@ public class EdicioNotesController {
     @FXML
     ComboBox comboBoxCategories;
     @FXML
-    Button botoEsborrarCategoria;
+    Button botoEsborrarEtiqueta;
     @FXML
-    Button botoAfegirCategoria;
+    Button botoAfegirEtiqueta;
     @FXML
     ListView llistaCategories;
     
@@ -45,21 +45,22 @@ public class EdicioNotesController {
         titol.setText(notaActual.getTitol());
         contingut.setText(notaActual.getContingut());
         checkboxPreferida.setSelected(notaActual.isPreferida());
-        botoAfegirCategoria.disableProperty().bind(comboBoxCategories.getSelectionModel().selectedItemProperty().isNull());
-        botoEsborrarCategoria.disableProperty().bind(llistaCategories.getSelectionModel().selectedItemProperty().isNull());
+        botoAfegirEtiqueta.disableProperty().bind(comboBoxCategories.getSelectionModel().selectedItemProperty().isNull());
+        botoEsborrarEtiqueta.disableProperty().bind(llistaCategories.getSelectionModel().selectedItemProperty().isNull());
         actualitzarCategories();
     }
     
     @FXML
     public void guardar(){
         canviarDades();
-        
+        /*
         if(notaActual.getId() == -1) {
             
             model.afegirNota(connexio.connecta(), notaActual, checkboxPreferida.isSelected());
         }else{
+        */
             model.modificarNota(connexio.connecta(), notaActual, checkboxPreferida.isSelected());
-        }
+       // }
         
         sortirEdicio();
     }
@@ -81,12 +82,17 @@ public class EdicioNotesController {
     @FXML
     private void actualitzarCategories(){
         comboBoxCategories.setItems(model.visualitzarCategoriesTotals(connexio.connecta()));
-        llistaCategories.setItems(model.visualitzarCategoriesNota(connexio.connecta()));
+        llistaCategories.setItems(model.visualitzarEtiquetesNota(connexio.connecta()));
         
     }
     @FXML
-    private void vincularCategoria(){
-        model.vincularCategoria(connexio.connecta(), (String)comboBoxCategories.getSelectionModel().getSelectedItem());
+    private void vincularEtiqueta(){
+        model.vincularEtiqueta(connexio.connecta(), (String)comboBoxCategories.getSelectionModel().getSelectedItem());
+        actualitzarCategories();
+    }
+    @FXML
+    private void desvincularEtiqueta(){
+        model.desvincularEtiqueta(connexio.connecta(), (String)llistaCategories.getSelectionModel().getSelectedItem());
         actualitzarCategories();
     }
     

@@ -151,7 +151,7 @@ public class Model {
         return m.matches();
     }
 
-    public void afegirNota(Connection c, Nota nota, boolean preferida) {
+    public Nota afegirNota(Connection c, Nota nota, boolean preferida) {
         String titol = nota.getTitol();
         String contingut = nota.getContingut();
         boolean enEdicio = nota.isEnEdicio();
@@ -179,8 +179,11 @@ public class Model {
             s.setBoolean(3, preferida);
 
             s.execute();
+            nota.setId(idNota);
+            return nota;
         } catch (Exception ex) {
             SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades");
+            return nota;
         }
     }
 
@@ -259,53 +262,54 @@ public class Model {
         }
     }
 
-    public void afegirCategoria(Connection c, String nomCategoria) {
-        int idCategoria = -1;
+    public void afegirEtiqueta(Connection c, String nomEtiqueta) {
+        int idEtiqueta = -1;
         int count = 0;
         try {
             PreparedStatement s;
-            s = c.prepareStatement("SELECT COUNT(*) AS countCategoria FROM categories WHERE nom_categoria = ? AND id_usuari = ?");
-            s.setString(1, nomCategoria);
+            s = c.prepareStatement("SELECT COUNT(*) AS countEtiqueta FROM categories WHERE nom_categoria = ? AND id_usuari = ?");
+            s.setString(1, nomEtiqueta);
             s.setInt(2, id_usuari);
 
             ResultSet rs = s.executeQuery();
             if (rs.next()) {
-                count = rs.getInt("countCategoria");
+                count = rs.getInt("countEtiqueta");
             }
 
             if (count == 0) {
                 s = c.prepareStatement("INSERT INTO categories(nom_categoria,id_usuari) VALUES (?,?)");
-                s.setString(1, nomCategoria);
+                s.setString(1, nomEtiqueta);
                 s.setInt(2, id_usuari);
                 s.execute();
+                SistemaAlerta.alerta("Etiqueta afegida correctament");
             } else {
-                SistemaAlerta.alerta("Aquesta categoria ja existeix!");
+                SistemaAlerta.alerta("Aquesta etiqueta ja existeix!");
             }
 
         } catch (Exception ex) {
-            SistemaAlerta.alerta("Error a la inserció de categoria" + ": " + ex.getMessage());
+            SistemaAlerta.alerta("Error a la inserció de etiqueta");
         }
     }
 
-    public void vincularCategoria(Connection c, String nomCategoria) {
-        int idCategoria = -1;
+    public void vincularEtiqueta(Connection c, String nomEtiqueta) {
+        int idEtiqueta = -1;
         PreparedStatement s;
         try {
             s = c.prepareStatement("SELECT id_categoria FROM categories WHERE nom_categoria = ? AND id_usuari = ?");
-            s.setString(1, nomCategoria);
+            s.setString(1, nomEtiqueta);
             s.setInt(2, id_usuari);
             ResultSet rs = s.executeQuery();
             if (rs.next()) {
-                idCategoria = rs.getInt("id_categoria");
+                idEtiqueta = rs.getInt("id_categoria");
             }
             
             s = c.prepareStatement("INSERT INTO notes_categories(id_nota,id_categoria) VALUES (?,?)");
             s.setInt(1, notaActual.getId());
-            s.setInt(2, idCategoria);
+            s.setInt(2, idEtiqueta);
 
             s.execute();
         } catch (SQLException ex) {
-            SistemaAlerta.alerta("Error a la vinculació de categoria" + ": " + ex.getMessage());
+            SistemaAlerta.alerta("Error a la vinculació de etiqueta");
         }
 
     }
@@ -315,9 +319,10 @@ public class Model {
         PreparedStatement s;
         try {
             
-            s = c.prepareStatement("SELECT nom_categoria FROM categories WHERE id_usuari = ?");
+            s = c.prepareStatement("SELECT nom_categoria FROM categories WHERE id_usuari = ? AND id_categoria NOT IN (SELECT id_categoria FROM notes_categories WHERE id_nota = ?)");
            
             s.setInt(1, id_usuari);
+            s.setInt(2, notaActual.getId());
             ResultSet resultat = s.executeQuery();
             while (resultat.next()) {
                 categories.add(resultat.getString("nom_categoria"));
@@ -325,13 +330,13 @@ public class Model {
             return categories;
 
         } catch (Exception ex) {
-            SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades");
+            SistemaAlerta.alerta("Error amb el servidor de Bases de Dades");
             return categories;
         }
 
     }
     
-    public ObservableList<String> visualitzarCategoriesNota(Connection c) {
+    public ObservableList<String> visualitzarEtiquetesNota(Connection c) {
         ObservableList<String> categories = FXCollections.observableArrayList();
         PreparedStatement s;
         try {
@@ -347,10 +352,39 @@ public class Model {
             return categories;
 
         } catch (Exception ex) {
-            SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades");
+            SistemaAlerta.alerta("Error amb el servidor de Bases de Dades");
             return categories;
         }
 
+    }
+    public void esborrarEtiquetaTotalment(Connection c, String nom_etiqueta){
+        PreparedStatement s;
+        try {
+            s = c.prepareStatement("DELETE FROM categories WHERE id_usuari= ? AND nom_categoria = ?");
+            s.setInt(1, id_usuari);
+            s.setString(2, nom_etiqueta);
+            s.execute();
+            SistemaAlerta.alerta("Etiqueta eliminada correctament");
+        } catch (SQLException ex) {
+            SistemaAlerta.alerta("Error a la eliminació de etiqueta");
+        }
+        
+    }
+    public void desvincularEtiqueta(Connection c, String nomEtiqueta){
+        int idEtiqueta = -1;
+        PreparedStatement s;
+        try {
+            s = c.prepareStatement("DELETE FROM notes_categories WHERE id_categoria = (SELECT id_categoria FROM categories WHERE nom_categoria = ? AND id_usuari = ?) AND id_nota = ?");
+            s.setString(1, nomEtiqueta);
+            s.setInt(2, id_usuari);
+            s.setInt(3, notaActual.getId());
+            
+
+            s.execute();
+        } catch (SQLException ex) {
+            SistemaAlerta.alerta("Error a la desvinculació de etiqueta:"+ex.getMessage());
+        }
+        
     }
 
 }

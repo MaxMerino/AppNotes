@@ -12,12 +12,12 @@
    <children>
       <TextField fx:id="titol" layoutX="14.0" layoutY="14.0" prefHeight="31.0" prefWidth="390.0" promptText="Títol" />
       <TextArea fx:id="contingut" layoutX="14.0" layoutY="49.0" prefHeight="296.0" prefWidth="390.0" promptText="Contingut..." />
-      <Button layoutX="416.0" layoutY="59.0" mnemonicParsing="false" onAction="#sortirEdicio" text="Cancel·lar" />
-      <Button layoutX="501.0" layoutY="59.0" mnemonicParsing="false" onAction="#guardar" text="Guardar" />
+      <Button layoutX="502.0" layoutY="59.0" mnemonicParsing="false" onAction="#sortirEdicio" text="Cancel·lar" />
+      <Button layoutX="423.0" layoutY="59.0" mnemonicParsing="false" onAction="#guardar" text="Guardar" />
       <CheckBox fx:id="checkboxPreferida" layoutX="423.0" layoutY="21.0" mnemonicParsing="false" text="Afegir a Notes Preferides" />
       <ComboBox fx:id="comboBoxCategories" layoutX="423.0" layoutY="197.0" prefHeight="26.0" prefWidth="103.0" />
       <ListView fx:id="llistaCategories" layoutX="14.0" layoutY="345.0" orientation="HORIZONTAL" prefHeight="39.0" prefWidth="390.0" />
-      <Button fx:id="botoAfegirCategoria" layoutX="415.0" layoutY="224.0" mnemonicParsing="false" onAction="#vincularCategoria" text="Afegir Categoria" />
-      <Button fx:id="botoEsborrarCategoria" layoutX="408.0" layoutY="350.0" mnemonicParsing="false" text="Esborrar Categoria" />
+      <Button fx:id="botoAfegirEtiqueta" layoutX="415.0" layoutY="224.0" mnemonicParsing="false" onAction="#vincularEtiqueta" text="Afegir Etiqueta" />
+      <Button fx:id="botoEsborrarEtiqueta" layoutX="408.0" layoutY="350.0" mnemonicParsing="false" onAction="#desvincularEtiqueta" text="Esborrar Etiqueta" />
    </children>
 </AnchorPane>

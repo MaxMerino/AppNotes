@@ -38,8 +38,8 @@
       <Button fx:id="botoEsborrar" layoutX="388.0" layoutY="216.0" mnemonicParsing="false" onAction="#esborrarNotes" text="Esborrar" />
       <Button fx:id="botoModificar" layoutX="384.0" layoutY="182.0" mnemonicParsing="false" onAction="#editarNota" text="Modificar" />
       <Button fx:id="botoCompartir" layoutX="382.0" layoutY="252.0" mnemonicParsing="false" onAction="#compartirNota" text="Compartir" />
-      <TextField fx:id="textCategoria" layoutX="382.0" layoutY="291.0" prefHeight="31.0" prefWidth="127.0" />
-      <Button layoutX="381.0" layoutY="322.0" mnemonicParsing="false" onAction="#crearCategoria" prefHeight="30.0" prefWidth="127.0" text="Crear categoria" />
-      <Button layoutX="381.0" layoutY="355.0" mnemonicParsing="false" onAction="#crearCategoria" prefHeight="30.0" prefWidth="127.0" text="Esborrar categoria" />
+      <TextField fx:id="textEtiqueta" layoutX="382.0" layoutY="291.0" prefHeight="31.0" prefWidth="127.0" />
+      <Button layoutX="381.0" layoutY="322.0" mnemonicParsing="false" onAction="#crearEtiqueta" prefHeight="30.0" prefWidth="127.0" text="Crear etiqueta" />
+      <Button layoutX="381.0" layoutY="355.0" mnemonicParsing="false" onAction="#eliminarEtiqueta" prefHeight="30.0" prefWidth="127.0" text="Esborrar etiqueta" />
    </children>
 </AnchorPane>
