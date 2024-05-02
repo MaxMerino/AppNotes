@@ -20,7 +20,6 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-
 /**
  *
  * @author alumne
@@ -37,7 +36,6 @@ public class Model {
     public void setNotaActual(Nota notaActual) {
         this.notaActual = notaActual;
     }
-    
 
     public int getId_usuari() {
         return id_usuari;
@@ -47,9 +45,8 @@ public class Model {
         this.id_usuari = id_usuari;
     }
 
-    
     public boolean InsertarUsuari(Connection c, String nom, String correu, String contrasenya) {
-        if (!isBuit(nom) && !isBuit(correu) && !isBuit(contrasenya) && correuValid(correu) ) {
+        if (!isBuit(nom) && !isBuit(correu) && !isBuit(contrasenya) && correuValid(correu)) {
             try {
 
                 PreparedStatement ss = c.prepareStatement("SELECT COUNT(*) AS count FROM usuaris WHERE correu = ? OR nom = ?");
@@ -73,7 +70,7 @@ public class Model {
             } catch (Exception ex) {
                 return false;
             }
-        } 
+        }
         return false;
 
     }
@@ -112,10 +109,10 @@ public class Model {
                     if (result.verified) {
 
                         return id_usuari;
-                    } 
-                } 
+                    }
+                }
             } catch (Exception ex) {
-                
+
                 return -1;
             }
         }
@@ -146,21 +143,21 @@ public class Model {
     public boolean isBuit(String cadena) {
         return cadena.length() == 0;
     }
-    
+
     public boolean correuValid(String email) {
-           String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
-           java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
-           java.util.regex.Matcher m = p.matcher(email);
-           return m.matches();
+        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+        java.util.regex.Matcher m = p.matcher(email);
+        return m.matches();
     }
-    
-    public void afegirNota(Connection c, Nota nota, boolean preferida){
+
+    public void afegirNota(Connection c, Nota nota, boolean preferida) {
         String titol = nota.getTitol();
         String contingut = nota.getContingut();
         boolean enEdicio = nota.isEnEdicio();
         Timestamp data = nota.getSqlData();
         int idNota = 0;
-        
+
         try {
             PreparedStatement s;
             s = c.prepareStatement("INSERT INTO notes(titol,contingut,is_en_edicio,data_modificacio) VALUES (?,?,?,?)");
@@ -169,50 +166,50 @@ public class Model {
             s.setBoolean(3, enEdicio);
             s.setTimestamp(4, data);
             s.execute();
-            
+
             s = c.prepareStatement("SELECT LAST_INSERT_ID() as id FROM notes");
             ResultSet rs = s.executeQuery();
             if (rs.next()) {
-                idNota =  rs.getInt("id");
+                idNota = rs.getInt("id");
             }
-            
+
             s = c.prepareStatement("INSERT INTO notes_usuaris(id_nota,id_usuari,is_preferida) VALUES (?,?,?)");
             s.setInt(1, idNota);
-            s.setInt(2, id_usuari); 
+            s.setInt(2, id_usuari);
             s.setBoolean(3, preferida);
-            
+
             s.execute();
         } catch (Exception ex) {
             SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades");
         }
     }
-    
-    public ObservableList<Nota> visualitzarNotes(Connection c, boolean nomesPreferides){
+
+    public ObservableList<Nota> visualitzarNotes(Connection c, boolean nomesPreferides) {
         ObservableList<Nota> notes = FXCollections.observableArrayList();
         PreparedStatement s;
         try {
             String consultaBase = "SELECT notes.id_nota, titol, contingut, is_en_edicio, data_modificacio, is_preferida FROM notes INNER JOIN notes_usuaris ON notes.id_nota = notes_usuaris.id_nota WHERE id_usuari = ?";
             if (nomesPreferides) {
-                s = c.prepareStatement(consultaBase+" AND is_preferida");
-            }else{
+                s = c.prepareStatement(consultaBase + " AND is_preferida");
+            } else {
                 s = c.prepareStatement(consultaBase);
             }
             s.setInt(1, id_usuari);
             ResultSet resultat = s.executeQuery();
             while (resultat.next()) {
-                Nota notaTupla = new Nota(resultat.getInt("id_nota"),resultat.getString("titol"),resultat.getString("contingut"),resultat.getBoolean("is_en_edicio"),resultat.getTimestamp("data_modificacio").toLocalDateTime(),resultat.getBoolean("is_preferida"));
+                Nota notaTupla = new Nota(resultat.getInt("id_nota"), resultat.getString("titol"), resultat.getString("contingut"), resultat.getBoolean("is_en_edicio"), resultat.getTimestamp("data_modificacio").toLocalDateTime(), resultat.getBoolean("is_preferida"));
                 notes.add(notaTupla);
             }
             return notes;
-            
+
         } catch (Exception ex) {
             SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades");
             return notes;
         }
-        
+
     }
-    
-    public void esborrarNota(Connection c, Nota nota){
+
+    public void esborrarNota(Connection c, Nota nota) {
         int countCompartit = 0;
         PreparedStatement s;
         try {
@@ -227,20 +224,20 @@ public class Model {
                 s.setInt(1, nota.getId());
                 s.setInt(2, id_usuari);
                 s.execute();
-            }else{
+            } else {
                 s = c.prepareStatement("DELETE FROM notes WHERE id_nota = ?");
                 s.setInt(1, nota.getId());
-                
+
                 s.execute();
             }
-            
+
         } catch (Exception ex) {
             SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades");
         }
-            
+
     }
-    
-    public void modificarNota(Connection c, Nota nota, boolean preferida){
+
+    public void modificarNota(Connection c, Nota nota, boolean preferida) {
         //TODO: Programar data i en edicio
         PreparedStatement s;
         try {
@@ -251,7 +248,7 @@ public class Model {
             s.setTimestamp(3, nota.getSqlData());
             s.setInt(4, nota.getId());
             s.execute();
-            
+
             s = c.prepareStatement("UPDATE notes_usuaris SET is_preferida = ? WHERE id_usuari = ? AND id_nota = ?");
             s.setBoolean(1, preferida);
             s.setInt(2, id_usuari);
@@ -261,8 +258,99 @@ public class Model {
             SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades");
         }
     }
+
+    public void afegirCategoria(Connection c, String nomCategoria) {
+        int idCategoria = -1;
+        int count = 0;
+        try {
+            PreparedStatement s;
+            s = c.prepareStatement("SELECT COUNT(*) AS countCategoria FROM categories WHERE nom_categoria = ? AND id_usuari = ?");
+            s.setString(1, nomCategoria);
+            s.setInt(2, id_usuari);
+
+            ResultSet rs = s.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt("countCategoria");
+            }
+
+            if (count == 0) {
+                s = c.prepareStatement("INSERT INTO categories(nom_categoria,id_usuari) VALUES (?,?)");
+                s.setString(1, nomCategoria);
+                s.setInt(2, id_usuari);
+                s.execute();
+            } else {
+                SistemaAlerta.alerta("Aquesta categoria ja existeix!");
+            }
+
+        } catch (Exception ex) {
+            SistemaAlerta.alerta("Error a la inserció de categoria" + ": " + ex.getMessage());
+        }
+    }
+
+    public void vincularCategoria(Connection c, String nomCategoria) {
+        int idCategoria = -1;
+        PreparedStatement s;
+        try {
+            s = c.prepareStatement("SELECT id_categoria FROM categories WHERE nom_categoria = ? AND id_usuari = ?");
+            s.setString(1, nomCategoria);
+            s.setInt(2, id_usuari);
+            ResultSet rs = s.executeQuery();
+            if (rs.next()) {
+                idCategoria = rs.getInt("id_categoria");
+            }
+            
+            s = c.prepareStatement("INSERT INTO notes_categories(id_nota,id_categoria) VALUES (?,?)");
+            s.setInt(1, notaActual.getId());
+            s.setInt(2, idCategoria);
+
+            s.execute();
+        } catch (SQLException ex) {
+            SistemaAlerta.alerta("Error a la vinculació de categoria" + ": " + ex.getMessage());
+        }
+
+    }
     
+    public ObservableList<String> visualitzarCategoriesTotals(Connection c) {
+        ObservableList<String> categories = FXCollections.observableArrayList();
+        PreparedStatement s;
+        try {
+            
+            s = c.prepareStatement("SELECT nom_categoria FROM categories WHERE id_usuari = ?");
+           
+            s.setInt(1, id_usuari);
+            ResultSet resultat = s.executeQuery();
+            while (resultat.next()) {
+                categories.add(resultat.getString("nom_categoria"));
+            }
+            return categories;
+
+        } catch (Exception ex) {
+            SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades");
+            return categories;
+        }
+
+    }
     
-    
+    public ObservableList<String> visualitzarCategoriesNota(Connection c) {
+        ObservableList<String> categories = FXCollections.observableArrayList();
+        PreparedStatement s;
+        try {
+            
+            s = c.prepareStatement("SELECT nom_categoria FROM categories INNER JOIN notes_categories ON categories.id_categoria = notes_categories.id_categoria WHERE id_nota = ? AND id_usuari = ?");
+           
+            s.setInt(1, notaActual.getId());
+            s.setInt(2, id_usuari);
+            ResultSet resultat = s.executeQuery();
+            while (resultat.next()) {
+                categories.add(resultat.getString("nom_categoria"));
+            }
+            return categories;
+
+        } catch (Exception ex) {
+            SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades");
+            return categories;
+        }
+
+    }
 
 }

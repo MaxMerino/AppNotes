@@ -6,7 +6,9 @@ import com.maxmerino.appnotes_maxmerino.model.Nota;
 import java.io.IOException;
 import java.time.LocalDate;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -28,6 +30,14 @@ public class EdicioNotesController {
     
     @FXML
     CheckBox checkboxPreferida;
+    @FXML
+    ComboBox comboBoxCategories;
+    @FXML
+    Button botoEsborrarCategoria;
+    @FXML
+    Button botoAfegirCategoria;
+    @FXML
+    ListView llistaCategories;
     
     @FXML
     public void initialize(){
@@ -35,6 +45,9 @@ public class EdicioNotesController {
         titol.setText(notaActual.getTitol());
         contingut.setText(notaActual.getContingut());
         checkboxPreferida.setSelected(notaActual.isPreferida());
+        botoAfegirCategoria.disableProperty().bind(comboBoxCategories.getSelectionModel().selectedItemProperty().isNull());
+        botoEsborrarCategoria.disableProperty().bind(llistaCategories.getSelectionModel().selectedItemProperty().isNull());
+        actualitzarCategories();
     }
     
     @FXML
@@ -65,5 +78,16 @@ public class EdicioNotesController {
         }
     }
     
+    @FXML
+    private void actualitzarCategories(){
+        comboBoxCategories.setItems(model.visualitzarCategoriesTotals(connexio.connecta()));
+        llistaCategories.setItems(model.visualitzarCategoriesNota(connexio.connecta()));
+        
+    }
+    @FXML
+    private void vincularCategoria(){
+        model.vincularCategoria(connexio.connecta(), (String)comboBoxCategories.getSelectionModel().getSelectedItem());
+        actualitzarCategories();
+    }
     
 }

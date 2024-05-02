@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TextField;
 
 public class SecondaryController {
     Connexio connexio = new Connexio();
@@ -33,6 +34,11 @@ public class SecondaryController {
     @FXML
     Button botoModificar;
     
+    @FXML
+    Button botoCompartir;
+    @FXML
+    TextField textCategoria;
+    
    
     
     @FXML
@@ -42,6 +48,7 @@ public class SecondaryController {
     private void initialize(){
         botoEsborrar.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
         botoModificar.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
+        botoCompartir.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
         
         labelId.setText(String.valueOf(model.getId_usuari()));
         llistaNotes.setItems(model.visualitzarNotes(connexio.connecta(),false));
@@ -85,21 +92,30 @@ public class SecondaryController {
         }
         actualitzarLlistes();
     }
+    
+    @FXML
+    private void compartirNota(){
+        
+    }
 
     @FXML
     private void actualitzarLlistes(){
         if (tabTotesNotes.isSelected()) {
             llistaNotes.setItems(model.visualitzarNotes(connexio.connecta(),false));
-            if (botoEsborrar != null && botoModificar != null) {
+            if (botoEsborrar != null && botoModificar != null && botoCompartir != null) {
                 botoEsborrar.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
                 botoModificar.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
+                botoCompartir.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
+
             }
         }else{
             
             llistaNotesPreferits.setItems(model.visualitzarNotes(connexio.connecta(),true));
-            if (botoEsborrar != null && botoModificar != null) {
+            if (botoEsborrar != null && botoModificar != null && botoCompartir != null) {
                 botoEsborrar.disableProperty().bind(llistaNotesPreferits.getSelectionModel().selectedItemProperty().isNull());
                 botoModificar.disableProperty().bind(llistaNotesPreferits.getSelectionModel().selectedItemProperty().isNull());
+                botoCompartir.disableProperty().bind(llistaNotesPreferits.getSelectionModel().selectedItemProperty().isNull());
+
             }
             
         }
@@ -123,6 +139,13 @@ public class SecondaryController {
         } catch (IOException ex) {
             System.out.println();
         }
+    }
+    @FXML 
+    private void crearCategoria(){
+        if(textCategoria.getText().length() > 0){
+            model.afegirCategoria(connexio.connecta(), textCategoria.getText());
+        }
+        
     }
     
     

@@ -5,13 +5,14 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@estils/estil.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.maxmerino.appnotes_maxmerino.SecondaryController">
    <children>
-      <Label fx:id="labelId" layoutX="528.0" layoutY="68.0" text="Label" />
-      <Button layoutX="477.0" layoutY="18.0" mnemonicParsing="false" onAction="#tancarSessio" text="Tancar Sessió" />
-      <TabPane layoutX="55.0" layoutY="12.0" prefHeight="384.0" prefWidth="325.0" tabClosingPolicy="UNAVAILABLE">
+      <Label fx:id="labelId" layoutX="446.0" layoutY="7.0" text="Label" />
+      <Button layoutX="490.0" layoutY="5.0" mnemonicParsing="false" onAction="#tancarSessio" text="Tancar Sessió" />
+      <TabPane layoutX="2.0" layoutY="2.0" prefHeight="394.0" prefWidth="366.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab fx:id="tabTotesNotes" onSelectionChanged="#actualitzarLlistes" text="Totes les Notes">
             <content>
@@ -33,8 +34,12 @@
           </Tab>
         </tabs>
       </TabPane>
-      <Button layoutX="487.0" layoutY="133.0" mnemonicParsing="false" onAction="#afegirNota" prefHeight="30.0" prefWidth="78.0" text="Afegir" />
-      <Button fx:id="botoEsborrar" layoutX="493.0" layoutY="204.0" mnemonicParsing="false" onAction="#esborrarNotes" text="Esborrar" />
-      <Button fx:id="botoModificar" layoutX="489.0" layoutY="170.0" mnemonicParsing="false" onAction="#editarNota" text="Modificar" />
+      <Button layoutX="382.0" layoutY="145.0" mnemonicParsing="false" onAction="#afegirNota" prefHeight="30.0" prefWidth="78.0" text="Afegir" />
+      <Button fx:id="botoEsborrar" layoutX="388.0" layoutY="216.0" mnemonicParsing="false" onAction="#esborrarNotes" text="Esborrar" />
+      <Button fx:id="botoModificar" layoutX="384.0" layoutY="182.0" mnemonicParsing="false" onAction="#editarNota" text="Modificar" />
+      <Button fx:id="botoCompartir" layoutX="382.0" layoutY="252.0" mnemonicParsing="false" onAction="#compartirNota" text="Compartir" />
+      <TextField fx:id="textCategoria" layoutX="382.0" layoutY="291.0" prefHeight="31.0" prefWidth="127.0" />
+      <Button layoutX="381.0" layoutY="322.0" mnemonicParsing="false" onAction="#crearCategoria" prefHeight="30.0" prefWidth="127.0" text="Crear categoria" />
+      <Button layoutX="381.0" layoutY="355.0" mnemonicParsing="false" onAction="#crearCategoria" prefHeight="30.0" prefWidth="127.0" text="Esborrar categoria" />
    </children>
 </AnchorPane>
