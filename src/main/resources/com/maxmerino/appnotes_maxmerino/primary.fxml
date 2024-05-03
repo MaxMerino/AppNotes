@@ -5,17 +5,31 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="720.0" stylesheets="@estils/estil.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.maxmerino.appnotes_maxmerino.PrimaryController">
    <children>
-      <TextField fx:id="regCorreu" layoutX="77.0" layoutY="165.0" promptText="Correu Electrònic" />
-      <Button layoutX="132.0" layoutY="238.0" mnemonicParsing="false" onAction="#registrarse" text="Entrar" />
-      <Label layoutX="373.0" layoutY="109.0" text="Iniciar Sessio" />
-      <Label layoutX="123.0" layoutY="109.0" text="Registrar-se" />
-      <TextField fx:id="inCorreu" layoutX="330.0" layoutY="132.0" promptText="Correu Electrònic" />
-      <TextField fx:id="regNom" layoutX="77.0" layoutY="133.0" promptText="Nom Usuari" />
-      <Button layoutX="387.0" layoutY="198.0" mnemonicParsing="false" onAction="#iniciarSessio" text="Entrar" />
-      <PasswordField fx:id="regContrasenya" layoutX="77.0" layoutY="198.0" promptText="Contrasenya" />
-      <PasswordField fx:id="inContrasenya" layoutX="331.0" layoutY="165.0" promptText="Contrasenya" />
+      <Label layoutX="434.0" layoutY="270.0" text="Iniciar Sessió" AnchorPane.bottomAnchor="239.6" AnchorPane.rightAnchor="164.4">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <TextField fx:id="inCorreu" layoutX="407.0" layoutY="340.0" promptText="Correu Electrònic" AnchorPane.bottomAnchor="168.8" AnchorPane.rightAnchor="136.2" />
+      <Button layoutX="467.0" layoutY="418.0" mnemonicParsing="false" onAction="#iniciarSessio" text="Entrar" AnchorPane.bottomAnchor="92.00000000000003" AnchorPane.rightAnchor="197.0" />
+      <PasswordField fx:id="inContrasenya" layoutX="407.0" layoutY="381.0" promptText="Contrasenya" AnchorPane.bottomAnchor="127.8" AnchorPane.rightAnchor="136.2" />
+      <Button layoutX="177.0" layoutY="418.0" mnemonicParsing="false" onAction="#registrarse" text="Entrar" AnchorPane.bottomAnchor="92.4" AnchorPane.leftAnchor="177.0" />
+      <Label layoutX="149.0" layoutY="270.0" text="Registrar-se" AnchorPane.bottomAnchor="239.6" AnchorPane.leftAnchor="148.79999999999998">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <TextField fx:id="regNom" layoutX="118.0" layoutY="302.0" promptText="Nom Usuari" AnchorPane.bottomAnchor="206.8" AnchorPane.leftAnchor="117.59999999999997" />
+      <TextField fx:id="regCorreu" layoutX="118.0" layoutY="340.0" promptText="Correu Electrònic" AnchorPane.bottomAnchor="168.8" AnchorPane.leftAnchor="118.0" />
+      <PasswordField fx:id="regContrasenya" layoutX="118.0" layoutY="381.0" promptText="Contrasenya" AnchorPane.bottomAnchor="127.8" AnchorPane.leftAnchor="118.0" />
+      <Label layoutX="304.0" layoutY="128.0" text="Benvingut!" AnchorPane.leftAnchor="304.0" AnchorPane.rightAnchor="312.8" AnchorPane.topAnchor="128.0">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

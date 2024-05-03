@@ -47,8 +47,17 @@ public class CompartirController {
     @FXML
     private void compartir(){
         model.compartirNota(connexio.connecta(), (Usuari)llistaResultats.getSelectionModel().getSelectedItem());
-        
+        canviarPantalla();
     }
     
+    
+    @FXML
+    private void canviarPantalla(){
+        try {
+            App.setRoot("secondary");
+        } catch (IOException ex) {
+            System.out.println();
+        }
+    }
     
 }

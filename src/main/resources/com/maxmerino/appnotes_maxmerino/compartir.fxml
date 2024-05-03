@@ -18,5 +18,6 @@
             <Font size="18.0" />
          </font>
       </Label>
+      <Button fx:id="botoCompartir1" layoutX="617.0" layoutY="496.0" mnemonicParsing="false" onAction="#canviarPantalla" text="Cancel·lar" />
    </children>
 </AnchorPane>

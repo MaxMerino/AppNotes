@@ -127,6 +127,19 @@ public class Model {
         }
         return usuaris;
     }
+    public void eliminarUsuari(Connection c){
+        PreparedStatement s;
+        try {
+            s = c.prepareStatement("DELETE FROM notes WHERE id_nota IN (SELECT id_nota FROM notes_usuaris WHERE id_usuari = ?)");
+            s.setInt(1, id_usuari);
+            s.execute();
+            s = c.prepareStatement("DELETE FROM usuaris WHERE id_usuari = ?");
+            s.setInt(1, id_usuari);
+            s.execute();
+        } catch (SQLException ex) {
+            SistemaAlerta.alerta("Error amb l'eliminació del compte");
+        }
+    }
     public void compartirNota(Connection c, Usuari usuari) {
         
         int count = 0;
@@ -204,13 +217,14 @@ public class Model {
         PreparedStatement s;
         Nota notaRetorn = new Nota();
         try {
-            s = c.prepareStatement("SELECT notes.id_nota, titol, contingut, is_en_edicio, data_modificacio, is_preferida FROM notes INNER JOIN notes_usuaris ON notes.id_nota = notes_usuaris.id_nota WHERE notes.id_nota = ?");
+            s = c.prepareStatement("SELECT notes.id_nota, titol, contingut, is_en_edicio, data_modificacio, is_preferida FROM notes INNER JOIN notes_usuaris ON notes.id_nota = notes_usuaris.id_nota WHERE notes.id_nota = ? AND notes_usuaris.id_usuari = ?");
             s.setInt(1, id);
+            s.setInt(2, id_usuari);
             ResultSet resultat = s.executeQuery();
             if (resultat.next()) {
                 notaRetorn = new Nota(resultat.getInt("id_nota"), resultat.getString("titol"), resultat.getString("contingut"), resultat.getBoolean("is_en_edicio"), resultat.getTimestamp("data_modificacio").toLocalDateTime(), resultat.getBoolean("is_preferida"));
             }
-
+            
         } catch (SQLException ex) {
             SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades" + ex.getMessage());
 

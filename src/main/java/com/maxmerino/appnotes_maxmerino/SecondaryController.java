@@ -16,26 +16,26 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 
 public class SecondaryController {
+
     Connexio connexio = new Connexio();
     Model model;
-    public void injecta(Model model){
+
+    public void injecta(Model model) {
         this.model = model;
     }
-    
-    
-    
+
     @FXML
     ListView llistaNotes;
-    
+
     @FXML
     ListView llistaNotesPreferits;
-    
+
     @FXML
     Button botoEsborrar;
 
     @FXML
     Button botoModificar;
-    
+
     @FXML
     Button botoCompartir;
     @FXML
@@ -52,166 +52,182 @@ public class SecondaryController {
 
     @FXML
     ComboBox comboBoxFiltre;
-    
+
     @FXML
-    private void initialize(){
+    private void initialize() {
         botoEsborrar.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
         botoModificar.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
         botoCompartir.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
         botoFiltrar.disableProperty().bind(comboBoxFiltre.getSelectionModel().selectedItemProperty().isNull());
         botoNetejar.disableProperty().bind(comboBoxFiltre.getSelectionModel().selectedItemProperty().isNull());
-        
-        
-        llistaNotes.setItems(model.visualitzarNotes(connexio.connecta(),false));
+
+        llistaNotes.setItems(model.visualitzarNotes(connexio.connecta(), false));
         comboBoxFiltre.setItems(model.visualitzarEtiquetesTotals(connexio.connecta()));
-        
+
     }
-    
+
     @FXML
     private void switchToPrimary() throws IOException {
         App.setRoot("primary");
     }
-    
+
     @FXML
-    private void afegirNota(){
+    private void afegirNota() {
         Nota notaNova = new Nota();;
-        
+
         notaNova = model.afegirNota(connexio.connecta(), notaNova, !tabTotesNotes.isSelected());
         model.setNotaActual(notaNova);
-        
+
         obrirPantallaEdicio();
     }
-    
+
     @FXML
-    private void editarNota(){
+    private void editarNota() {
         Nota notaNova;
-        
+
         if (tabTotesNotes.isSelected()) {
-            notaNova = (Nota)llistaNotes.getSelectionModel().getSelectedItem();
-        
-        }else{
-            notaNova = (Nota)llistaNotesPreferits.getSelectionModel().getSelectedItem();
+            notaNova = (Nota) llistaNotes.getSelectionModel().getSelectedItem();
+
+        } else {
+            notaNova = (Nota) llistaNotesPreferits.getSelectionModel().getSelectedItem();
         }
         int idNota = notaNova.getId();
         //Per recuperar la versió que hi ha a la base de dades per evitar editar una versió anterior
         notaNova = model.notaPerId(connexio.connecta(), idNota);
         if (!notaNova.isEnEdicio()) {
             model.setNotaActual(notaNova);
-            
+
             obrirPantallaEdicio();
-        }else{
+        } else {
             SistemaAlerta.alerta("Un altre usuari està editant la nota.");
         }
-        
+
     }
-     
+
     @FXML
-    private void esborrarNotes(){
-        if (tabTotesNotes.isSelected()) {
-            model.esborrarNota(connexio.connecta(), (Nota)llistaNotes.getSelectionModel().getSelectedItem());
-        }else{
-            model.esborrarNota(connexio.connecta(), (Nota)llistaNotesPreferits.getSelectionModel().getSelectedItem());
+    private void esborrarNotes() {
+        if (SistemaAlerta.alertaConfirmacio("Segur que vols esborrar la nota?")) {
+            if (tabTotesNotes.isSelected()) {
+                model.esborrarNota(connexio.connecta(), (Nota) llistaNotes.getSelectionModel().getSelectedItem());
+            } else {
+                model.esborrarNota(connexio.connecta(), (Nota) llistaNotesPreferits.getSelectionModel().getSelectedItem());
+            }
+            actualitzarLlistes();
         }
-        actualitzarLlistes();
+
     }
-    
+
     @FXML
-    private void compartirNota(){
+    private void compartirNota() {
         Nota notaNova;
-        
+
         if (tabTotesNotes.isSelected()) {
-            notaNova = (Nota)llistaNotes.getSelectionModel().getSelectedItem();
-        
-        }else{
-            notaNova = (Nota)llistaNotesPreferits.getSelectionModel().getSelectedItem();
+            notaNova = (Nota) llistaNotes.getSelectionModel().getSelectedItem();
+
+        } else {
+            notaNova = (Nota) llistaNotesPreferits.getSelectionModel().getSelectedItem();
         }
         model.setNotaActual(notaNova);
         try {
             App.setRoot("compartir");
-            
-            
+
         } catch (IOException ex) {
             System.out.println();
         }
-        
+
     }
 
     @FXML
-    private void actualitzarLlistes(){
+    private void actualitzarLlistes() {
         if (comboBoxFiltre != null) {
             comboBoxFiltre.setItems(model.visualitzarEtiquetesTotals(connexio.connecta()));
             comboBoxFiltre.getSelectionModel().select(null);
         }
-        
+
         if (tabTotesNotes.isSelected()) {
-            
-            llistaNotes.setItems(model.visualitzarNotes(connexio.connecta(),false));
+
+            llistaNotes.setItems(model.visualitzarNotes(connexio.connecta(), false));
             if (botoEsborrar != null && botoModificar != null && botoCompartir != null) {
                 botoEsborrar.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
                 botoModificar.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
                 botoCompartir.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
 
             }
-        }else{
-            
-            llistaNotesPreferits.setItems(model.visualitzarNotes(connexio.connecta(),true));
+        } else {
+
+            llistaNotesPreferits.setItems(model.visualitzarNotes(connexio.connecta(), true));
             if (botoEsborrar != null && botoModificar != null && botoCompartir != null) {
                 botoEsborrar.disableProperty().bind(llistaNotesPreferits.getSelectionModel().selectedItemProperty().isNull());
                 botoModificar.disableProperty().bind(llistaNotesPreferits.getSelectionModel().selectedItemProperty().isNull());
                 botoCompartir.disableProperty().bind(llistaNotesPreferits.getSelectionModel().selectedItemProperty().isNull());
 
             }
-            
+
         }
     }
-    
+
     @FXML
-    private void obrirPantallaEdicio(){
+    private void obrirPantallaEdicio() {
         try {
             App.setRoot("edicio_notes");
         } catch (IOException ex) {
             System.out.println();
         }
     }
-    
+
     @FXML
-    private void tancarSessio(){
+    private void tancarSessio() {
         try {
             App.setRoot("primary");
             model.setId_usuari(-1);
-            
+
         } catch (IOException ex) {
             System.out.println();
         }
     }
-    @FXML 
-    private void crearEtiqueta(){
-        if(textEtiqueta.getText().length() > 0){
+
+    @FXML
+    private void crearEtiqueta() {
+        if (textEtiqueta.getText().length() > 0) {
             model.afegirEtiqueta(connexio.connecta(), textEtiqueta.getText());
             textEtiqueta.setText("");
             actualitzarLlistes();
         }
-        
+
     }
-    
-    @FXML 
-    private void eliminarEtiqueta(){
-        if(textEtiqueta.getText().length() > 0){
+
+    @FXML
+    private void eliminarEtiqueta() {
+        if (textEtiqueta.getText().length() > 0 && SistemaAlerta.alertaConfirmacio("Segur que vols esborrar l'etiqueta?")) {
             model.esborrarEtiquetaTotalment(connexio.connecta(), textEtiqueta.getText());
             textEtiqueta.setText("");
             actualitzarLlistes();
         }
-        
+
     }
-    
-    @FXML 
-    private void filtrarCategoria(){
+
+    @FXML
+    private void filtrarCategoria() {
         if (!tabTotesNotes.isSelected()) {
             tabPane.getSelectionModel().select(tabTotesNotes);
-            
+
         }
-        llistaNotes.setItems(model.filtrarNotes(connexio.connecta(), (String)comboBoxFiltre.getSelectionModel().getSelectedItem()));
-        
+        llistaNotes.setItems(model.filtrarNotes(connexio.connecta(), (String) comboBoxFiltre.getSelectionModel().getSelectedItem()));
+
     }
-    
+
+    @FXML
+    private void sortirPrograma() {
+        System.exit(0);
+    }
+
+    @FXML
+    private void eliminarCompte() {
+        if (SistemaAlerta.alertaConfirmacio("Segur que vols esborrar el compte de forma permanent?")) {
+            model.eliminarUsuari(connexio.connecta());
+            tancarSessio();
+        }
+
+    }
+
 }

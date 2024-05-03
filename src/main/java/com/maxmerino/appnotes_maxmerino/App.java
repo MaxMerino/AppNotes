@@ -31,6 +31,7 @@ public class App extends Application {
         controlador2.injecta(model);
         controlador3.injecta(model);
         controlador4.injecta(model);
+        controlador3.injectaStage(stage);
         scene = new Scene(loadFXML("primary"), 720, 540);
         stage.setScene(scene);
         stage.show();

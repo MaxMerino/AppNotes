@@ -6,6 +6,7 @@ package com.maxmerino.appnotes_maxmerino;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 /**
@@ -23,5 +24,24 @@ public class SistemaAlerta {
         Stage stage = (Stage) alerta.getDialogPane().getScene().getWindow();
         stage.setAlwaysOnTop(true);
         alerta.show();
+    }
+    
+    public static boolean alertaConfirmacio(String text) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText(null);
+        alert.setTitle("Confirmació");
+        alert.setContentText(text);
+        ButtonType botoSi = new ButtonType("Sí");
+        ButtonType botoNo = new ButtonType("No");
+        alert.getButtonTypes().setAll(botoSi, botoNo);
+        
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.setAlwaysOnTop(true);
+
+        
+        alert.showAndWait();
+
+        
+        return alert.getResult() == botoSi;
     }
 }

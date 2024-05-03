@@ -31,8 +31,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-background-color: #2196F3; /* Blau segons Material Design */
     -fx-text-fill: #fff; 
     -fx-font-size: 14px;
-    -fx-border-radius: 5px; /* Botons més arrodonits */
-    -fx-background-radius: 5px;
+    -fx-border-radius: 15px; /* Botons més arrodonits */
+    -fx-background-radius: 15px;
     -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 10, 0, 0, 1 ); 
 }
 

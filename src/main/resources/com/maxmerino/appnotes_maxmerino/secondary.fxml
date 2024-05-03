@@ -4,6 +4,9 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
@@ -11,8 +14,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="720.0" stylesheets="@estils/estil.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.maxmerino.appnotes_maxmerino.SecondaryController">
    <children>
-      <Button layoutX="567.0" layoutY="69.0" mnemonicParsing="false" onAction="#tancarSessio" text="Tancar Sessió" />
-      <TabPane fx:id="tabPane" layoutY="52.0" prefHeight="482.0" prefWidth="366.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="tabPane" layoutY="29.0" prefHeight="505.0" prefWidth="366.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="5.599999999999966" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="353.6" AnchorPane.topAnchor="29.0">
         <tabs>
           <Tab fx:id="tabTotesNotes" onSelectionChanged="#actualitzarLlistes" text="Totes les Notes">
             <content>
@@ -34,16 +36,36 @@
           </Tab>
         </tabs>
       </TabPane>
-      <Button layoutX="374.0" layoutY="227.0" mnemonicParsing="false" onAction="#afegirNota" prefHeight="30.0" prefWidth="78.0" text="Afegir" />
-      <Button fx:id="botoEsborrar" layoutX="380.0" layoutY="298.0" mnemonicParsing="false" onAction="#esborrarNotes" text="Esborrar" />
-      <Button fx:id="botoModificar" layoutX="376.0" layoutY="264.0" mnemonicParsing="false" onAction="#editarNota" text="Modificar" />
-      <Button fx:id="botoCompartir" layoutX="374.0" layoutY="334.0" mnemonicParsing="false" onAction="#compartirNota" text="Compartir" />
-      <TextField fx:id="textEtiqueta" layoutX="374.0" layoutY="373.0" prefHeight="31.0" prefWidth="127.0" />
-      <Button layoutX="373.0" layoutY="404.0" mnemonicParsing="false" onAction="#crearEtiqueta" prefHeight="30.0" prefWidth="127.0" text="Crear etiqueta" />
-      <Button layoutX="373.0" layoutY="437.0" mnemonicParsing="false" onAction="#eliminarEtiqueta" prefHeight="30.0" prefWidth="127.0" text="Esborrar etiqueta" />
-      <Button fx:id="botoFiltrar" layoutX="502.0" layoutY="138.0" mnemonicParsing="false" onAction="#filtrarCategoria" prefHeight="30.0" prefWidth="78.0" text="Filtrar" />
-      <ComboBox fx:id="comboBoxFiltre" layoutX="385.0" layoutY="140.0" prefHeight="26.0" prefWidth="102.0" />
-      <Button fx:id="botoNetejar" layoutX="592.0" layoutY="138.0" mnemonicParsing="false" onAction="#actualitzarLlistes" prefHeight="30.0" prefWidth="78.0" text="Netejar" />
+      <Button layoutX="373.0" layoutY="200.0" mnemonicParsing="false" onAction="#afegirNota" prefHeight="50.0" prefWidth="164.0" text="Afegir Nota" AnchorPane.bottomAnchor="289.6" AnchorPane.rightAnchor="183.0" />
+      <Button fx:id="botoEsborrar" layoutX="373.0" layoutY="309.0" mnemonicParsing="false" onAction="#esborrarNotes" prefHeight="30.0" prefWidth="164.0" style="-fx-background-color: red;" text="Esborrar Nota" AnchorPane.bottomAnchor="200.6" AnchorPane.rightAnchor="183.0" />
+      <Button fx:id="botoModificar" layoutX="373.0" layoutY="262.0" mnemonicParsing="false" onAction="#editarNota" text="Modificar" AnchorPane.bottomAnchor="248.4" AnchorPane.rightAnchor="268.6" />
+      <Button fx:id="botoCompartir" layoutX="459.0" layoutY="262.0" mnemonicParsing="false" onAction="#compartirNota" text="Compartir" AnchorPane.bottomAnchor="248.80000000000004" AnchorPane.rightAnchor="179.4" />
+      <TextField fx:id="textEtiqueta" layoutX="578.0" layoutY="408.0" prefHeight="31.0" prefWidth="127.0" AnchorPane.bottomAnchor="100.8" AnchorPane.rightAnchor="14.799999999999997" />
+      <Button layoutX="578.0" layoutY="457.0" mnemonicParsing="false" onAction="#crearEtiqueta" prefHeight="30.0" prefWidth="127.0" text="Crear etiqueta" AnchorPane.bottomAnchor="52.6" AnchorPane.rightAnchor="14.799999999999997" />
+      <Button layoutX="578.0" layoutY="495.0" mnemonicParsing="false" onAction="#eliminarEtiqueta" prefHeight="30.0" prefWidth="127.0" text="Esborrar etiqueta" AnchorPane.bottomAnchor="14.600000000000001" AnchorPane.rightAnchor="14.40000000000002" />
+      <Button fx:id="botoFiltrar" layoutX="531.0" layoutY="27.0" mnemonicParsing="false" onAction="#filtrarCategoria" prefHeight="30.0" prefWidth="78.0" text="Filtrar" AnchorPane.rightAnchor="110.39999999999995" />
+      <ComboBox fx:id="comboBoxFiltre" layoutX="373.0" layoutY="29.0" prefHeight="26.0" prefWidth="149.0" promptText="Seleccionar etiqueta" AnchorPane.rightAnchor="197.6" />
+      <Button fx:id="botoNetejar" layoutX="620.0" layoutY="27.0" mnemonicParsing="false" onAction="#actualitzarLlistes" prefHeight="30.0" prefWidth="78.0" text="Netejar" AnchorPane.rightAnchor="21.599999999999994" />
       <Accordion layoutX="500.0" layoutY="240.0" />
+      <MenuBar layoutY="1.0" prefHeight="26.0" prefWidth="720.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Arxiu">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#sortirPrograma" text="Sortir" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Vista">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#actualitzarLlistes" text="Actualitzar Vista de Notes" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Compte">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#tancarSessio" text="Tancar Sessió" />
+                  <MenuItem mnemonicParsing="false" onAction="#eliminarCompte" text="Esborrar Compte Permanentment" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
    </children>
 </AnchorPane>
