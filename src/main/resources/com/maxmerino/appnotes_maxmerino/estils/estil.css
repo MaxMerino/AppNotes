@@ -15,7 +15,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 .label {
     -fx-text-fill: #333; /* Text més fosc */
-    -fx-font-size: 16px; /* Mida de la font lleugerament més gran */
+    /*-fx-font-size: 16px; */ /* Mida de la font lleugerament més gran */
 }
 
 .list-view {

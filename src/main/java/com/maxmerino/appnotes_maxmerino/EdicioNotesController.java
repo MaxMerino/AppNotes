@@ -31,23 +31,24 @@ public class EdicioNotesController {
     @FXML
     CheckBox checkboxPreferida;
     @FXML
-    ComboBox comboBoxCategories;
+    ComboBox comboBoxEtiquetes;
     @FXML
     Button botoEsborrarEtiqueta;
     @FXML
     Button botoAfegirEtiqueta;
     @FXML
-    ListView llistaCategories;
+    ListView llistaEtiquetes;
     
     @FXML
     public void initialize(){
         notaActual = model.getNotaActual();
+        model.canviarEstatEdicio(connexio.connecta(), true, notaActual.getId());
         titol.setText(notaActual.getTitol());
         contingut.setText(notaActual.getContingut());
         checkboxPreferida.setSelected(notaActual.isPreferida());
-        botoAfegirEtiqueta.disableProperty().bind(comboBoxCategories.getSelectionModel().selectedItemProperty().isNull());
-        botoEsborrarEtiqueta.disableProperty().bind(llistaCategories.getSelectionModel().selectedItemProperty().isNull());
-        actualitzarCategories();
+        botoAfegirEtiqueta.disableProperty().bind(comboBoxEtiquetes.getSelectionModel().selectedItemProperty().isNull());
+        botoEsborrarEtiqueta.disableProperty().bind(llistaEtiquetes.getSelectionModel().selectedItemProperty().isNull());
+        actualitzarEtiquetes();
     }
     
     @FXML
@@ -59,6 +60,7 @@ public class EdicioNotesController {
             model.afegirNota(connexio.connecta(), notaActual, checkboxPreferida.isSelected());
         }else{
         */
+           
             model.modificarNota(connexio.connecta(), notaActual, checkboxPreferida.isSelected());
        // }
         
@@ -72,6 +74,7 @@ public class EdicioNotesController {
     
     @FXML
     public void sortirEdicio(){
+        model.canviarEstatEdicio(connexio.connecta(), false, notaActual.getId());
          try {
             App.setRoot("secondary");
         } catch (IOException ex) {
@@ -80,20 +83,20 @@ public class EdicioNotesController {
     }
     
     @FXML
-    private void actualitzarCategories(){
-        comboBoxCategories.setItems(model.visualitzarCategoriesTotals(connexio.connecta()));
-        llistaCategories.setItems(model.visualitzarEtiquetesNota(connexio.connecta()));
+    private void actualitzarEtiquetes(){
+        comboBoxEtiquetes.setItems(model.visualitzarEtiquetesNoVinculades(connexio.connecta()));
+        llistaEtiquetes.setItems(model.visualitzarEtiquetesNota(connexio.connecta()));
         
     }
     @FXML
     private void vincularEtiqueta(){
-        model.vincularEtiqueta(connexio.connecta(), (String)comboBoxCategories.getSelectionModel().getSelectedItem());
-        actualitzarCategories();
+        model.vincularEtiqueta(connexio.connecta(), (String)comboBoxEtiquetes.getSelectionModel().getSelectedItem());
+        actualitzarEtiquetes();
     }
     @FXML
     private void desvincularEtiqueta(){
-        model.desvincularEtiqueta(connexio.connecta(), (String)llistaCategories.getSelectionModel().getSelectedItem());
-        actualitzarCategories();
+        model.desvincularEtiqueta(connexio.connecta(), (String)llistaEtiquetes.getSelectionModel().getSelectedItem());
+        actualitzarEtiquetes();
     }
     
 }

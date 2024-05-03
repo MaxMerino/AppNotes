@@ -19,16 +19,19 @@ public class App extends Application {
     private static PrimaryController controlador1;
     private static SecondaryController controlador2;
     private static EdicioNotesController controlador3;
+    private static CompartirController controlador4;
     @Override
     public void start(Stage stage) throws IOException {
         model = new Model();
         controlador1 = new PrimaryController();
         controlador2 = new SecondaryController();
         controlador3 = new EdicioNotesController();
+        controlador4 = new CompartirController();
         controlador1.injecta(model);
         controlador2.injecta(model);
         controlador3.injecta(model);
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        controlador4.injecta(model);
+        scene = new Scene(loadFXML("primary"), 720, 540);
         stage.setScene(scene);
         stage.show();
     }
@@ -43,9 +46,11 @@ public class App extends Application {
             fxmlLoader.setControllerFactory(param->controlador1);
         } else if(fxml.equals("secondary")){
             fxmlLoader.setControllerFactory(param->controlador2);
-        }else{
+        }else if(fxml.equals("edicio_notes")){
            
             fxmlLoader.setControllerFactory(param->controlador3);
+        }else{
+            fxmlLoader.setControllerFactory(param->controlador4);
         }
         return fxmlLoader.load();
     }

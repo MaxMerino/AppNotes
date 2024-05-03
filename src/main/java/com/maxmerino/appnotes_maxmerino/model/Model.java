@@ -75,20 +75,6 @@ public class Model {
 
     }
 
-    public void SeleccionarUsuaris(Connection c) {
-        try {
-            Statement s = c.createStatement();
-            ResultSet rs = s.executeQuery("SELECT * FROM usuaris;");
-
-            while (rs.next()) {
-                System.out.println("Id:" + rs.getInt("id_usuari") + " Nom:" + rs.getString("nom") + " Correu:" + rs.getString("correu") + " Contrasenya:" + rs.getString("contrasenya"));
-            }
-
-        } catch (SQLException ex) {
-
-        }
-    }
-
     public int ComprovarUsuari(Connection c, String correu, String contrasenya) {
         int count = 0;
         int id_usuari = 0;
@@ -119,25 +105,52 @@ public class Model {
         return -1;
     }
 
-    public void recollirLlistaUsuaris(Connection c, String query, int id_actual) throws SQLException {
-        HashMap<String, Integer> mapaUsuaris = new HashMap();
-        ArrayList<String> nomsUsuaris = new ArrayList();
+    public ObservableList<Usuari> recollirLlistaUsuaris(Connection c, String query) {
+        ObservableList<Usuari> usuaris = FXCollections.observableArrayList();
 
-        PreparedStatement s = c.prepareStatement("SELECT id_usuari, nom FROM usuaris WHERE id_usuari != ? AND nom LIKE '%" + query + "%';");
-        s.setInt(1, id_actual);
+        PreparedStatement s;
+        try {
+            s = c.prepareStatement("SELECT id_usuari, nom FROM usuaris WHERE nom LIKE '%" + query + "%' AND id_usuari NOT IN(SELECT id_usuari FROM notes_usuaris WHERE id_nota = ?)");
+           
+            s.setInt(1, notaActual.getId());
 
-        ResultSet rs = s.executeQuery();
-        while (rs.next()) {
-            int id = rs.getInt("id_usuari");
-            String nom = rs.getString("nom");
-            nomsUsuaris.add(nom);
-            mapaUsuaris.put(nom, id);
+            ResultSet rs = s.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id_usuari");
+                String nom = rs.getString("nom");
+                usuaris.add(new Usuari(id,nom));
+            }
+            
+           
+        } catch (SQLException ex) {
+            SistemaAlerta.alerta("Error amb el servidor de Bases de Dades"+ex.getMessage());
         }
+        return usuaris;
+    }
+    public void compartirNota(Connection c, Usuari usuari) {
+        
+        int count = 0;
+        PreparedStatement s;
+        try {
+            s = c.prepareStatement("SELECT COUNT(*) as count FROM notes_usuaris WHERE id_nota = ? AND id_usuari = ?");
+            s.setInt(1, notaActual.getId());
+            s.setInt(2, usuari.getIdUsuari());
 
-        for (String nomUsuari : nomsUsuaris) {
-            System.out.println(nomUsuari + ": " + mapaUsuaris.get(nomUsuari));
-
+            ResultSet rs = s.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt("count");
+            }
+            if (count == 0) {
+                s = c.prepareStatement("INSERT INTO notes_usuaris VALUES (?,?,0)");
+                s.setInt(1, notaActual.getId());
+                s.setInt(2, usuari.getIdUsuari());
+                s.execute();
+            }
+           
+        } catch (SQLException ex) {
+            SistemaAlerta.alerta("Error amb el servidor de Bases de Dades"+ex.getMessage());
         }
+        
     }
 
     public boolean isBuit(String cadena) {
@@ -185,6 +198,39 @@ public class Model {
             SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades");
             return nota;
         }
+    }
+
+    public Nota notaPerId(Connection c, int id) {
+        PreparedStatement s;
+        Nota notaRetorn = new Nota();
+        try {
+            s = c.prepareStatement("SELECT notes.id_nota, titol, contingut, is_en_edicio, data_modificacio, is_preferida FROM notes INNER JOIN notes_usuaris ON notes.id_nota = notes_usuaris.id_nota WHERE notes.id_nota = ?");
+            s.setInt(1, id);
+            ResultSet resultat = s.executeQuery();
+            if (resultat.next()) {
+                notaRetorn = new Nota(resultat.getInt("id_nota"), resultat.getString("titol"), resultat.getString("contingut"), resultat.getBoolean("is_en_edicio"), resultat.getTimestamp("data_modificacio").toLocalDateTime(), resultat.getBoolean("is_preferida"));
+            }
+
+        } catch (SQLException ex) {
+            SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades" + ex.getMessage());
+
+        }
+        return notaRetorn;
+    }
+
+    public void canviarEstatEdicio(Connection c, boolean edicio, int id) {
+        PreparedStatement s;
+        Nota notaRetorn = new Nota();
+        try {
+            s = c.prepareStatement("UPDATE notes SET is_en_edicio = ? WHERE id_nota = ?");
+            s.setBoolean(1, edicio);
+            s.setInt(2, id);
+            s.execute();
+        } catch (SQLException ex) {
+            SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades" + ex.getMessage());
+
+        }
+
     }
 
     public ObservableList<Nota> visualitzarNotes(Connection c, boolean nomesPreferides) {
@@ -241,7 +287,7 @@ public class Model {
     }
 
     public void modificarNota(Connection c, Nota nota, boolean preferida) {
-        //TODO: Programar data i en edicio
+
         PreparedStatement s;
         try {
             s = c.prepareStatement("UPDATE notes SET titol = ?, contingut = ?, data_modificacio= ? WHERE id_nota = ?");
@@ -267,7 +313,7 @@ public class Model {
         int count = 0;
         try {
             PreparedStatement s;
-            s = c.prepareStatement("SELECT COUNT(*) AS countEtiqueta FROM categories WHERE nom_categoria = ? AND id_usuari = ?");
+            s = c.prepareStatement("SELECT COUNT(*) AS countEtiqueta FROM etiquetes WHERE nom_etiqueta = ? AND id_usuari = ?");
             s.setString(1, nomEtiqueta);
             s.setInt(2, id_usuari);
 
@@ -277,7 +323,7 @@ public class Model {
             }
 
             if (count == 0) {
-                s = c.prepareStatement("INSERT INTO categories(nom_categoria,id_usuari) VALUES (?,?)");
+                s = c.prepareStatement("INSERT INTO etiquetes(nom_etiqueta,id_usuari) VALUES (?,?)");
                 s.setString(1, nomEtiqueta);
                 s.setInt(2, id_usuari);
                 s.execute();
@@ -295,15 +341,15 @@ public class Model {
         int idEtiqueta = -1;
         PreparedStatement s;
         try {
-            s = c.prepareStatement("SELECT id_categoria FROM categories WHERE nom_categoria = ? AND id_usuari = ?");
+            s = c.prepareStatement("SELECT id_etiqueta FROM etiquetes WHERE nom_etiqueta = ? AND id_usuari = ?");
             s.setString(1, nomEtiqueta);
             s.setInt(2, id_usuari);
             ResultSet rs = s.executeQuery();
             if (rs.next()) {
-                idEtiqueta = rs.getInt("id_categoria");
+                idEtiqueta = rs.getInt("id_etiqueta");
             }
-            
-            s = c.prepareStatement("INSERT INTO notes_categories(id_nota,id_categoria) VALUES (?,?)");
+
+            s = c.prepareStatement("INSERT INTO notes_etiquetes(id_nota,id_etiqueta) VALUES (?,?)");
             s.setInt(1, notaActual.getId());
             s.setInt(2, idEtiqueta);
 
@@ -313,54 +359,77 @@ public class Model {
         }
 
     }
-    
-    public ObservableList<String> visualitzarCategoriesTotals(Connection c) {
-        ObservableList<String> categories = FXCollections.observableArrayList();
+
+    public ObservableList<String> visualitzarEtiquetesTotals(Connection c) {
+        ObservableList<String> etiquetes = FXCollections.observableArrayList();
         PreparedStatement s;
         try {
-            
-            s = c.prepareStatement("SELECT nom_categoria FROM categories WHERE id_usuari = ? AND id_categoria NOT IN (SELECT id_categoria FROM notes_categories WHERE id_nota = ?)");
-           
+
+            s = c.prepareStatement("SELECT nom_etiqueta FROM etiquetes WHERE id_usuari = ?");
+
+            s.setInt(1, id_usuari);
+
+            ResultSet resultat = s.executeQuery();
+            while (resultat.next()) {
+                etiquetes.add(resultat.getString("nom_etiqueta"));
+            }
+            return etiquetes;
+
+        } catch (Exception ex) {
+            SistemaAlerta.alerta("Error amb el servidor de Bases de Dades:" + ex.getMessage());
+            return etiquetes;
+        }
+
+    }
+
+    public ObservableList<String> visualitzarEtiquetesNoVinculades(Connection c) {
+        ObservableList<String> etiquetes = FXCollections.observableArrayList();
+        PreparedStatement s;
+        try {
+
+            s = c.prepareStatement("SELECT nom_etiqueta FROM etiquetes WHERE id_usuari = ? AND id_etiqueta NOT IN (SELECT id_etiqueta FROM notes_etiquetes WHERE id_nota = ?)");
+
             s.setInt(1, id_usuari);
             s.setInt(2, notaActual.getId());
             ResultSet resultat = s.executeQuery();
             while (resultat.next()) {
-                categories.add(resultat.getString("nom_categoria"));
+                etiquetes.add(resultat.getString("nom_etiqueta"));
             }
-            return categories;
+            return etiquetes;
 
         } catch (Exception ex) {
             SistemaAlerta.alerta("Error amb el servidor de Bases de Dades");
-            return categories;
+            return etiquetes;
         }
 
     }
-    
+
     public ObservableList<String> visualitzarEtiquetesNota(Connection c) {
-        ObservableList<String> categories = FXCollections.observableArrayList();
+        ObservableList<String> etiquetes = FXCollections.observableArrayList();
         PreparedStatement s;
         try {
-            
-            s = c.prepareStatement("SELECT nom_categoria FROM categories INNER JOIN notes_categories ON categories.id_categoria = notes_categories.id_categoria WHERE id_nota = ? AND id_usuari = ?");
-           
+
+            s = c.prepareStatement("SELECT nom_etiqueta FROM etiquetes INNER JOIN notes_etiquetes ON etiquetes.id_etiqueta = notes_etiquetes.id_etiqueta WHERE id_nota = ? AND id_usuari = ?");
+
             s.setInt(1, notaActual.getId());
             s.setInt(2, id_usuari);
             ResultSet resultat = s.executeQuery();
             while (resultat.next()) {
-                categories.add(resultat.getString("nom_categoria"));
+                etiquetes.add(resultat.getString("nom_etiqueta"));
             }
-            return categories;
+            return etiquetes;
 
         } catch (Exception ex) {
             SistemaAlerta.alerta("Error amb el servidor de Bases de Dades");
-            return categories;
+            return etiquetes;
         }
 
     }
-    public void esborrarEtiquetaTotalment(Connection c, String nom_etiqueta){
+
+    public void esborrarEtiquetaTotalment(Connection c, String nom_etiqueta) {
         PreparedStatement s;
         try {
-            s = c.prepareStatement("DELETE FROM categories WHERE id_usuari= ? AND nom_categoria = ?");
+            s = c.prepareStatement("DELETE FROM etiquetes WHERE id_usuari= ? AND nom_etiqueta = ?");
             s.setInt(1, id_usuari);
             s.setString(2, nom_etiqueta);
             s.execute();
@@ -368,23 +437,51 @@ public class Model {
         } catch (SQLException ex) {
             SistemaAlerta.alerta("Error a la eliminació de etiqueta");
         }
-        
+
     }
-    public void desvincularEtiqueta(Connection c, String nomEtiqueta){
+
+    public void desvincularEtiqueta(Connection c, String nomEtiqueta) {
         int idEtiqueta = -1;
         PreparedStatement s;
         try {
-            s = c.prepareStatement("DELETE FROM notes_categories WHERE id_categoria = (SELECT id_categoria FROM categories WHERE nom_categoria = ? AND id_usuari = ?) AND id_nota = ?");
+            s = c.prepareStatement("DELETE FROM notes_etiquetes WHERE id_etiqueta = (SELECT id_etiqueta FROM etiquetes WHERE nom_etiqueta = ? AND id_usuari = ?) AND id_nota = ?");
             s.setString(1, nomEtiqueta);
             s.setInt(2, id_usuari);
             s.setInt(3, notaActual.getId());
-            
 
             s.execute();
         } catch (SQLException ex) {
-            SistemaAlerta.alerta("Error a la desvinculació de etiqueta:"+ex.getMessage());
+            SistemaAlerta.alerta("Error a la desvinculació de etiqueta:" + ex.getMessage());
         }
-        
+
+    }
+
+    public ObservableList<Nota> filtrarNotes(Connection c, String nomEtiqueta) {
+        ObservableList<Nota> notes = FXCollections.observableArrayList();
+        PreparedStatement s;
+        try {
+
+            s = c.prepareStatement("SELECT notes.id_nota, titol, contingut, is_en_edicio, data_modificacio, is_preferida \n"
+                    + "FROM notes \n"
+                    + "INNER JOIN notes_usuaris ON notes.id_nota = notes_usuaris.id_nota \n"
+                    + "INNER JOIN notes_etiquetes ON notes.id_nota = notes_etiquetes.id_nota \n"
+                    + "INNER JOIN etiquetes ON notes_etiquetes.id_etiqueta = etiquetes.id_etiqueta \n"
+                    + "WHERE notes_usuaris.id_usuari = ? AND etiquetes.nom_etiqueta = ?");
+
+            s.setInt(1, id_usuari);
+            s.setString(2, nomEtiqueta);
+            ResultSet resultat = s.executeQuery();
+            while (resultat.next()) {
+                Nota notaTupla = new Nota(resultat.getInt("id_nota"), resultat.getString("titol"), resultat.getString("contingut"), resultat.getBoolean("is_en_edicio"), resultat.getTimestamp("data_modificacio").toLocalDateTime(), resultat.getBoolean("is_preferida"));
+                notes.add(notaTupla);
+            }
+            return notes;
+
+        } catch (Exception ex) {
+            SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades:" + ex.getMessage());
+            return notes;
+        }
+
     }
 
 }

@@ -6,10 +6,13 @@ import com.maxmerino.appnotes_maxmerino.model.Nota;
 import java.io.IOException;
 import java.time.LocalDate;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 
 public class SecondaryController {
@@ -19,8 +22,7 @@ public class SecondaryController {
         this.model = model;
     }
     
-    @FXML
-    Label labelId;
+    
     
     @FXML
     ListView llistaNotes;
@@ -37,21 +39,31 @@ public class SecondaryController {
     @FXML
     Button botoCompartir;
     @FXML
+    Button botoFiltrar;
+    @FXML
+    Button botoNetejar;
+    @FXML
     TextField textEtiqueta;
-    
-   
-    
+
     @FXML
     Tab tabTotesNotes;
+    @FXML
+    TabPane tabPane;
+
+    @FXML
+    ComboBox comboBoxFiltre;
     
     @FXML
     private void initialize(){
         botoEsborrar.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
         botoModificar.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
         botoCompartir.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
+        botoFiltrar.disableProperty().bind(comboBoxFiltre.getSelectionModel().selectedItemProperty().isNull());
+        botoNetejar.disableProperty().bind(comboBoxFiltre.getSelectionModel().selectedItemProperty().isNull());
         
-        labelId.setText(String.valueOf(model.getId_usuari()));
+        
         llistaNotes.setItems(model.visualitzarNotes(connexio.connecta(),false));
+        comboBoxFiltre.setItems(model.visualitzarEtiquetesTotals(connexio.connecta()));
         
     }
     
@@ -73,14 +85,24 @@ public class SecondaryController {
     @FXML
     private void editarNota(){
         Nota notaNova;
+        
         if (tabTotesNotes.isSelected()) {
             notaNova = (Nota)llistaNotes.getSelectionModel().getSelectedItem();
         
         }else{
             notaNova = (Nota)llistaNotesPreferits.getSelectionModel().getSelectedItem();
         }
-        model.setNotaActual(notaNova);
-        obrirPantallaEdicio();
+        int idNota = notaNova.getId();
+        //Per recuperar la versió que hi ha a la base de dades per evitar editar una versió anterior
+        notaNova = model.notaPerId(connexio.connecta(), idNota);
+        if (!notaNova.isEnEdicio()) {
+            model.setNotaActual(notaNova);
+            
+            obrirPantallaEdicio();
+        }else{
+            SistemaAlerta.alerta("Un altre usuari està editant la nota.");
+        }
+        
     }
      
     @FXML
@@ -95,12 +117,34 @@ public class SecondaryController {
     
     @FXML
     private void compartirNota(){
+        Nota notaNova;
+        
+        if (tabTotesNotes.isSelected()) {
+            notaNova = (Nota)llistaNotes.getSelectionModel().getSelectedItem();
+        
+        }else{
+            notaNova = (Nota)llistaNotesPreferits.getSelectionModel().getSelectedItem();
+        }
+        model.setNotaActual(notaNova);
+        try {
+            App.setRoot("compartir");
+            
+            
+        } catch (IOException ex) {
+            System.out.println();
+        }
         
     }
 
     @FXML
     private void actualitzarLlistes(){
+        if (comboBoxFiltre != null) {
+            comboBoxFiltre.setItems(model.visualitzarEtiquetesTotals(connexio.connecta()));
+            comboBoxFiltre.getSelectionModel().select(null);
+        }
+        
         if (tabTotesNotes.isSelected()) {
+            
             llistaNotes.setItems(model.visualitzarNotes(connexio.connecta(),false));
             if (botoEsborrar != null && botoModificar != null && botoCompartir != null) {
                 botoEsborrar.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
@@ -157,6 +201,16 @@ public class SecondaryController {
             textEtiqueta.setText("");
             actualitzarLlistes();
         }
+        
+    }
+    
+    @FXML 
+    private void filtrarCategoria(){
+        if (!tabTotesNotes.isSelected()) {
+            tabPane.getSelectionModel().select(tabTotesNotes);
+            
+        }
+        llistaNotes.setItems(model.filtrarNotes(connexio.connecta(), (String)comboBoxFiltre.getSelectionModel().getSelectedItem()));
         
     }
     

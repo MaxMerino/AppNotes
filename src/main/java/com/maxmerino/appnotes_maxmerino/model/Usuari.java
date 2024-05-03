@@ -11,7 +11,21 @@ package com.maxmerino.appnotes_maxmerino.model;
 public class Usuari {
     private int idUsuari;
     private String nom;
-    private String correu;
+
+    public Usuari(int idUsuari, String nom) {
+        this.idUsuari = idUsuari;
+        this.nom = nom;
+    }
+
+    @Override
+    public String toString() {
+        return nom;
+    }
+
+    public int getIdUsuari() {
+        return idUsuari;
+    }
+    
     
     
 }
