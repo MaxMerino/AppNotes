@@ -42,29 +42,38 @@ public class PrimaryController {
     @FXML
     public void registrarse(){
         
-        boolean resultat =  model.InsertarUsuari(connexio.connecta(), regNom.getText(), regCorreu.getText(), regContrasenya.getText());
-        if (resultat) {
+        int resultat =  model.InsertarUsuari(connexio.connecta(), regNom.getText(), regCorreu.getText(), regContrasenya.getText());
+        
+        if (resultat == 1) {
             
             int idSessio = model.ComprovarUsuari(connexio.connecta(), regCorreu.getText(), regContrasenya.getText());
-            SistemaAlerta.alerta("Compte creat correctament");
+            SistemaAlerta.alerta("Registrat correctament");
             model.setId_usuari(idSessio);
             
             canviarPantalla();
             
         }else{
-            SistemaAlerta.alerta("Compte no creat");
+            if (resultat == 0) {
+                SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades!");
+            }else{
+                SistemaAlerta.alerta("Revisa el format de les credencials!\nEl nom d'usuari ha de ser únic, el correu ha de ser vàlid i contrasenya de més de 8 caràcters");
+            }
         }
     }
     
     @FXML
     public void iniciarSessio(){
         int idSessio = model.ComprovarUsuari(connexio.connecta(), inCorreu.getText(), inContrasenya.getText());
-        if (idSessio != -1) {
-            SistemaAlerta.alerta("Credencials vàlides!");
+        if (idSessio != 0 && idSessio != -1) {
+            SistemaAlerta.alerta("Credencials vàlides, s'ha iniciat sessió");
             model.setId_usuari(idSessio);
             canviarPantalla();
         }else{
-            SistemaAlerta.alerta("Credencials invàlides!");
+            if (idSessio == 0) {
+                SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades!");
+            }else{
+                SistemaAlerta.alerta("Correu o contrasenya incorrectes!\n Recorda, la contrasenya ha de tenir més de 8 caràcters");
+            }
         }
     }
     
@@ -76,7 +85,7 @@ public class PrimaryController {
         try {
             App.setRoot("secondary");
         } catch (IOException ex) {
-            SistemaAlerta.alerta("Error!");
+            SistemaAlerta.alerta("Error!"+ex.getMessage());
         }
     }
     

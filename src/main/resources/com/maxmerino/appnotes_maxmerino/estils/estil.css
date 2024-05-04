@@ -10,48 +10,88 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 /* estil.css */
 
 .root {
-    -fx-background-color: #f5f5f5; /* Fons més clar */
+    -fx-background-color: #f5f5f5;
 }
 
 .label {
-    -fx-text-fill: #333; /* Text més fosc */
-    /*-fx-font-size: 16px; */ /* Mida de la font lleugerament més gran */
+    -fx-text-fill: #333;
 }
 
 .list-view {
-    -fx-background-color: #fff; /* Fons blanc */
-    -fx-border-color: #ccc; /* Contorn */
-    -fx-border-width: 1px; 
-    -fx-border-radius: 5px; /* Arrodoniment més pronunciat */
+    -fx-background-color: #fff;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
     -fx-background-radius: 10px;
-    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 10, 0, 0, 1 ); /* Ombra suau */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 1);
 }
 
 .button {
-    -fx-background-color: #2196F3; /* Blau segons Material Design */
-    -fx-text-fill: #fff; 
+    -fx-background-color: #2196F3;
+    -fx-text-fill: #fff;
     -fx-font-size: 14px;
-    -fx-border-radius: 15px; /* Botons més arrodonits */
-    -fx-background-radius: 15px;
-    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 10, 0, 0, 1 ); 
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 1);
 }
 
 .button:hover {
-    -fx-background-color: #0d47a1; /* Blau més fosc al passar el ratolí */
+    -fx-background-color: #0d47a1;
 }
 
 .text-field, .password-field, .text-area {
-    -fx-background-color: #fff; 
-    -fx-border-color: #ccc; 
-    -fx-border-width: 1px; 
-    -fx-border-radius: 5px; /* Contorns més suaus */
-    -fx-background-radius: 5px; 
-    -fx-font-size: 14px; 
-    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 10, 0, 0, 1 ); 
+    -fx-background-color: #fff;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-font-size: 14px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 1);
 }
 
-.checkbox {
-    -fx-text-fill: #333; 
-    -fx-font-size: 14px; 
-    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 10, 0, 0, 1 ); 
+.check-box .box {
+
+-fx-background-color: white;
+-fx-border-color:grey;
+-fx-border-radius:3px; 
+
+}
+
+.check-box:selected .mark {
+
+-fx-background-color: white;
+
+}
+
+.check-box:selected .box {
+
+-fx-background-color: #28a3f4;
+}
+
+.tab-pane {
+    
+    -fx-tab-min-height: 20px;
+    -fx-tab-max-height: 20px;
+}
+
+.tab {
+    -fx-background-color: #fff;
+    
+}
+
+.combo-box {
+    -fx-background-color: #fff;
+    -fx-border-color: #ccc;
+    -fx-border-width: 0px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 1);
+}
+
+.menu-bar{
+    -fx-background-color: #fff;
+}
+.menu{
+    -fx-background-color: #fff;
 }

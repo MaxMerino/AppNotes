@@ -45,8 +45,8 @@ public class Model {
         this.id_usuari = id_usuari;
     }
 
-    public boolean InsertarUsuari(Connection c, String nom, String correu, String contrasenya) {
-        if (!isBuit(nom) && !isBuit(correu) && !isBuit(contrasenya) && correuValid(correu)) {
+    public int InsertarUsuari(Connection c, String nom, String correu, String contrasenya) {
+        if (!isBuit(nom) && !isBuit(correu) && !isBuit(contrasenya) && contrasenya.length() >= 8 && correuValid(correu)) {
             try {
 
                 PreparedStatement ss = c.prepareStatement("SELECT COUNT(*) AS count FROM usuaris WHERE correu = ? OR nom = ?");
@@ -64,14 +64,14 @@ public class Model {
                     s.setString(2, correu);
                     s.setString(3, bcryptHashString);
                     s.execute();
-                    return true;
+                    return 1;
                 }
 
             } catch (Exception ex) {
-                return false;
+                return 0;
             }
         }
-        return false;
+        return  -1;
 
     }
 
@@ -79,7 +79,7 @@ public class Model {
         int count = 0;
         int id_usuari = 0;
         String hash = "";
-        if (!isBuit(correu) && !isBuit(contrasenya) && correuValid(correu)) {
+        if (!isBuit(correu) && !isBuit(contrasenya) && contrasenya.length() >= 8 && correuValid(correu)) {
             try {
                 PreparedStatement ss = c.prepareStatement("SELECT COUNT(*) AS count, id_usuari, contrasenya  FROM usuaris WHERE correu = ?");
                 ss.setString(1, correu);
@@ -99,7 +99,7 @@ public class Model {
                 }
             } catch (Exception ex) {
 
-                return -1;
+                return 0;
             }
         }
         return -1;
@@ -130,7 +130,7 @@ public class Model {
     public void eliminarUsuari(Connection c){
         PreparedStatement s;
         try {
-            s = c.prepareStatement("DELETE FROM notes WHERE id_nota IN (SELECT id_nota FROM notes_usuaris WHERE id_usuari = ?)");
+            s = c.prepareStatement("DELETE FROM notes WHERE id_nota IN (SELECT id_nota FROM notes_usuaris WHERE id_usuari = ? AND id_nota IN  (SELECT id_nota FROM notes_usuaris GROUP BY id_nota HAVING COUNT(id_nota) = 1))");
             s.setInt(1, id_usuari);
             s.execute();
             s = c.prepareStatement("DELETE FROM usuaris WHERE id_usuari = ?");
@@ -161,7 +161,7 @@ public class Model {
             }
            
         } catch (SQLException ex) {
-            SistemaAlerta.alerta("Error amb el servidor de Bases de Dades"+ex.getMessage());
+            SistemaAlerta.alerta("Error en compartir nota");
         }
         
     }
@@ -208,7 +208,7 @@ public class Model {
             nota.setId(idNota);
             return nota;
         } catch (Exception ex) {
-            SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades");
+            SistemaAlerta.alerta("Error en afegir la nota");
             return nota;
         }
     }
@@ -226,7 +226,7 @@ public class Model {
             }
             
         } catch (SQLException ex) {
-            SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades" + ex.getMessage());
+            SistemaAlerta.alerta("Error amb el servidor de Bases de Dades");
 
         }
         return notaRetorn;
@@ -241,7 +241,7 @@ public class Model {
             s.setInt(2, id);
             s.execute();
         } catch (SQLException ex) {
-            SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades" + ex.getMessage());
+            SistemaAlerta.alerta("Error amb el servidor de Bases de Dades");
 
         }
 
@@ -266,7 +266,7 @@ public class Model {
             return notes;
 
         } catch (Exception ex) {
-            SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades");
+            SistemaAlerta.alerta("Error en carregar les notes");
             return notes;
         }
 
@@ -295,7 +295,7 @@ public class Model {
             }
 
         } catch (Exception ex) {
-            SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades");
+            SistemaAlerta.alerta("Error en esborrar una nota");
         }
 
     }
@@ -318,7 +318,7 @@ public class Model {
             s.setInt(3, nota.getId());
             s.execute();
         } catch (Exception ex) {
-            SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades");
+            SistemaAlerta.alerta("Error en modificar una nota");
         }
     }
 
@@ -390,7 +390,7 @@ public class Model {
             return etiquetes;
 
         } catch (Exception ex) {
-            SistemaAlerta.alerta("Error amb el servidor de Bases de Dades:" + ex.getMessage());
+            SistemaAlerta.alerta("Error a la visualització d'etiquetes");
             return etiquetes;
         }
 
@@ -412,7 +412,7 @@ public class Model {
             return etiquetes;
 
         } catch (Exception ex) {
-            SistemaAlerta.alerta("Error amb el servidor de Bases de Dades");
+            SistemaAlerta.alerta("Error a la visualització d'etiquetes");
             return etiquetes;
         }
 
@@ -434,7 +434,7 @@ public class Model {
             return etiquetes;
 
         } catch (Exception ex) {
-            SistemaAlerta.alerta("Error amb el servidor de Bases de Dades");
+            SistemaAlerta.alerta("Error a la visualització d'etiquetes");
             return etiquetes;
         }
 
@@ -465,7 +465,7 @@ public class Model {
 
             s.execute();
         } catch (SQLException ex) {
-            SistemaAlerta.alerta("Error a la desvinculació de etiqueta:" + ex.getMessage());
+            SistemaAlerta.alerta("Error a la desvinculació d'etiqueta");
         }
 
     }
@@ -492,7 +492,7 @@ public class Model {
             return notes;
 
         } catch (Exception ex) {
-            SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades:" + ex.getMessage());
+            SistemaAlerta.alerta("Error al filtrat de notes");
             return notes;
         }
 

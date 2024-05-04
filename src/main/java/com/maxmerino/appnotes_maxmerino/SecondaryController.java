@@ -60,9 +60,12 @@ public class SecondaryController {
         botoCompartir.disableProperty().bind(llistaNotes.getSelectionModel().selectedItemProperty().isNull());
         botoFiltrar.disableProperty().bind(comboBoxFiltre.getSelectionModel().selectedItemProperty().isNull());
         botoNetejar.disableProperty().bind(comboBoxFiltre.getSelectionModel().selectedItemProperty().isNull());
-
+        comboBoxFiltre.disableProperty().bind(tabPane.getSelectionModel().selectedItemProperty().isNotEqualTo(tabTotesNotes));
         llistaNotes.setItems(model.visualitzarNotes(connexio.connecta(), false));
+       
         comboBoxFiltre.setItems(model.visualitzarEtiquetesTotals(connexio.connecta()));
+        
+        
 
     }
 
@@ -142,6 +145,7 @@ public class SecondaryController {
         if (comboBoxFiltre != null) {
             comboBoxFiltre.setItems(model.visualitzarEtiquetesTotals(connexio.connecta()));
             comboBoxFiltre.getSelectionModel().select(null);
+            
         }
 
         if (tabTotesNotes.isSelected()) {
@@ -208,13 +212,12 @@ public class SecondaryController {
 
     @FXML
     private void filtrarCategoria() {
-        if (!tabTotesNotes.isSelected()) {
-            tabPane.getSelectionModel().select(tabTotesNotes);
-
-        }
+        
+        
         llistaNotes.setItems(model.filtrarNotes(connexio.connecta(), (String) comboBoxFiltre.getSelectionModel().getSelectedItem()));
 
     }
+   
 
     @FXML
     private void sortirPrograma() {
