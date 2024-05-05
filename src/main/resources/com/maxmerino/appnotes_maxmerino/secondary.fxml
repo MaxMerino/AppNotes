@@ -43,7 +43,7 @@
       <TextField fx:id="textEtiqueta" layoutX="578.0" layoutY="408.0" prefHeight="31.0" prefWidth="127.0" AnchorPane.bottomAnchor="100.8" AnchorPane.rightAnchor="14.799999999999997" />
       <Button layoutX="578.0" layoutY="457.0" mnemonicParsing="false" onAction="#crearEtiqueta" prefHeight="30.0" prefWidth="127.0" text="Crear etiqueta" AnchorPane.bottomAnchor="52.6" AnchorPane.rightAnchor="14.799999999999997" />
       <Button layoutX="578.0" layoutY="495.0" mnemonicParsing="false" onAction="#eliminarEtiqueta" prefHeight="30.0" prefWidth="127.0" text="Esborrar etiqueta" AnchorPane.bottomAnchor="14.600000000000001" AnchorPane.rightAnchor="14.40000000000002" />
-      <Button fx:id="botoFiltrar" layoutX="532.0" layoutY="29.0" mnemonicParsing="false" onAction="#filtrarCategoria" prefHeight="30.0" prefWidth="78.0" text="Filtrar" AnchorPane.rightAnchor="109.6" />
+      <Button fx:id="botoFiltrar" layoutX="532.0" layoutY="29.0" mnemonicParsing="false" onAction="#filtrarEtiqueta" prefHeight="30.0" prefWidth="78.0" text="Filtrar" AnchorPane.rightAnchor="109.6" />
       <ComboBox fx:id="comboBoxFiltre" layoutX="374.0" layoutY="31.0" prefHeight="26.0" prefWidth="149.0" promptText="Seleccionar etiqueta" AnchorPane.rightAnchor="196.4" />
       <Button fx:id="botoNetejar" layoutX="621.0" layoutY="29.0" mnemonicParsing="false" onAction="#actualitzarLlistes" prefHeight="30.0" prefWidth="78.0" text="Netejar" AnchorPane.rightAnchor="20.599999999999994" />
       <Accordion layoutX="500.0" layoutY="240.0" />

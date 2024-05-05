@@ -1,6 +1,7 @@
 package com.maxmerino.appnotes_maxmerino;
 
 import com.maxmerino.appnotes_maxmerino.model.Connexio;
+import com.maxmerino.appnotes_maxmerino.model.Etiqueta;
 import com.maxmerino.appnotes_maxmerino.model.Model;
 import com.maxmerino.appnotes_maxmerino.model.Nota;
 import java.io.IOException;
@@ -193,9 +194,14 @@ public class SecondaryController {
     @FXML
     private void crearEtiqueta() {
         if (textEtiqueta.getText().length() > 0) {
-            model.afegirEtiqueta(connexio.connecta(), textEtiqueta.getText());
-            textEtiqueta.setText("");
-            actualitzarLlistes();
+            if (textEtiqueta.getText().length() < 50) {
+                model.afegirEtiqueta(connexio.connecta(), textEtiqueta.getText());
+                textEtiqueta.setText("");
+                actualitzarLlistes();
+            }else{
+                SistemaAlerta.alerta("El nom d'etiqueta no pot ser superior a 50 caràcters");
+            }
+            
         }
 
     }
@@ -211,10 +217,10 @@ public class SecondaryController {
     }
 
     @FXML
-    private void filtrarCategoria() {
+    private void filtrarEtiqueta() {
         
         
-        llistaNotes.setItems(model.filtrarNotes(connexio.connecta(), (String) comboBoxFiltre.getSelectionModel().getSelectedItem()));
+        llistaNotes.setItems(model.filtrarNotes(connexio.connecta(), (Etiqueta) comboBoxFiltre.getSelectionModel().getSelectedItem()));
 
     }
    

@@ -1,6 +1,7 @@
 package com.maxmerino.appnotes_maxmerino;
 
 import com.maxmerino.appnotes_maxmerino.model.Connexio;
+import com.maxmerino.appnotes_maxmerino.model.Etiqueta;
 import com.maxmerino.appnotes_maxmerino.model.Model;
 import com.maxmerino.appnotes_maxmerino.model.Nota;
 import java.io.IOException;
@@ -123,12 +124,12 @@ public class EdicioNotesController {
     }
     @FXML
     private void vincularEtiqueta(){
-        model.vincularEtiqueta(connexio.connecta(), (String)comboBoxEtiquetes.getSelectionModel().getSelectedItem());
+        model.vincularEtiqueta(connexio.connecta(), (Etiqueta)comboBoxEtiquetes.getSelectionModel().getSelectedItem());
         actualitzarEtiquetes();
     }
     @FXML
     private void desvincularEtiqueta(){
-        model.desvincularEtiqueta(connexio.connecta(), (String)llistaEtiquetes.getSelectionModel().getSelectedItem());
+        model.desvincularEtiqueta(connexio.connecta(), (Etiqueta)llistaEtiquetes.getSelectionModel().getSelectedItem());
         actualitzarEtiquetes();
     }
     

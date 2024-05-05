@@ -351,12 +351,12 @@ public class Model {
         }
     }
 
-    public void vincularEtiqueta(Connection c, String nomEtiqueta) {
+    public void vincularEtiqueta(Connection c, Etiqueta etiqueta) {
         int idEtiqueta = -1;
         PreparedStatement s;
         try {
             s = c.prepareStatement("SELECT id_etiqueta FROM etiquetes WHERE nom_etiqueta = ? AND id_usuari = ?");
-            s.setString(1, nomEtiqueta);
+            s.setString(1, etiqueta.getNom());
             s.setInt(2, id_usuari);
             ResultSet rs = s.executeQuery();
             if (rs.next()) {
@@ -374,18 +374,18 @@ public class Model {
 
     }
 
-    public ObservableList<String> visualitzarEtiquetesTotals(Connection c) {
-        ObservableList<String> etiquetes = FXCollections.observableArrayList();
+    public ObservableList<Etiqueta> visualitzarEtiquetesTotals(Connection c) {
+        ObservableList<Etiqueta> etiquetes = FXCollections.observableArrayList();
         PreparedStatement s;
         try {
 
-            s = c.prepareStatement("SELECT nom_etiqueta FROM etiquetes WHERE id_usuari = ?");
+            s = c.prepareStatement("SELECT id_etiqueta, nom_etiqueta FROM etiquetes WHERE id_usuari = ?");
 
             s.setInt(1, id_usuari);
 
             ResultSet resultat = s.executeQuery();
             while (resultat.next()) {
-                etiquetes.add(resultat.getString("nom_etiqueta"));
+                etiquetes.add(new Etiqueta(resultat.getInt("id_etiqueta"), resultat.getString("nom_etiqueta")));
             }
             return etiquetes;
 
@@ -396,18 +396,18 @@ public class Model {
 
     }
 
-    public ObservableList<String> visualitzarEtiquetesNoVinculades(Connection c) {
-        ObservableList<String> etiquetes = FXCollections.observableArrayList();
+    public ObservableList<Etiqueta> visualitzarEtiquetesNoVinculades(Connection c) {
+        ObservableList<Etiqueta> etiquetes = FXCollections.observableArrayList();
         PreparedStatement s;
         try {
 
-            s = c.prepareStatement("SELECT nom_etiqueta FROM etiquetes WHERE id_usuari = ? AND id_etiqueta NOT IN (SELECT id_etiqueta FROM notes_etiquetes WHERE id_nota = ?)");
+            s = c.prepareStatement("SELECT id_etiqueta, nom_etiqueta FROM etiquetes WHERE id_usuari = ? AND id_etiqueta NOT IN (SELECT id_etiqueta FROM notes_etiquetes WHERE id_nota = ?)");
 
             s.setInt(1, id_usuari);
             s.setInt(2, notaActual.getId());
             ResultSet resultat = s.executeQuery();
             while (resultat.next()) {
-                etiquetes.add(resultat.getString("nom_etiqueta"));
+                etiquetes.add(new Etiqueta(resultat.getInt("id_etiqueta"), resultat.getString("nom_etiqueta")));
             }
             return etiquetes;
 
@@ -418,23 +418,23 @@ public class Model {
 
     }
 
-    public ObservableList<String> visualitzarEtiquetesNota(Connection c) {
-        ObservableList<String> etiquetes = FXCollections.observableArrayList();
+    public ObservableList<Etiqueta> visualitzarEtiquetesNota(Connection c) {
+        ObservableList<Etiqueta> etiquetes = FXCollections.observableArrayList();
         PreparedStatement s;
         try {
 
-            s = c.prepareStatement("SELECT nom_etiqueta FROM etiquetes INNER JOIN notes_etiquetes ON etiquetes.id_etiqueta = notes_etiquetes.id_etiqueta WHERE id_nota = ? AND id_usuari = ?");
+            s = c.prepareStatement("SELECT etiquetes.id_etiqueta, nom_etiqueta FROM etiquetes INNER JOIN notes_etiquetes ON etiquetes.id_etiqueta = notes_etiquetes.id_etiqueta WHERE id_nota = ? AND id_usuari = ?");
 
             s.setInt(1, notaActual.getId());
             s.setInt(2, id_usuari);
             ResultSet resultat = s.executeQuery();
             while (resultat.next()) {
-                etiquetes.add(resultat.getString("nom_etiqueta"));
+                etiquetes.add(new Etiqueta(resultat.getInt("id_etiqueta"), resultat.getString("nom_etiqueta")));
             }
             return etiquetes;
 
         } catch (Exception ex) {
-            SistemaAlerta.alerta("Error a la visualització d'etiquetes");
+            SistemaAlerta.alerta("Error a la visualització d'etiquetes"+ex.getMessage());
             return etiquetes;
         }
 
@@ -454,15 +454,13 @@ public class Model {
 
     }
 
-    public void desvincularEtiqueta(Connection c, String nomEtiqueta) {
+    public void desvincularEtiqueta(Connection c, Etiqueta etiqueta) {
         int idEtiqueta = -1;
         PreparedStatement s;
         try {
-            s = c.prepareStatement("DELETE FROM notes_etiquetes WHERE id_etiqueta = (SELECT id_etiqueta FROM etiquetes WHERE nom_etiqueta = ? AND id_usuari = ?) AND id_nota = ?");
-            s.setString(1, nomEtiqueta);
-            s.setInt(2, id_usuari);
-            s.setInt(3, notaActual.getId());
-
+            s = c.prepareStatement("DELETE FROM notes_etiquetes WHERE id_etiqueta = ? AND id_nota = ?");
+            s.setInt(1, etiqueta.getIdEtiqueta());
+            s.setInt(2, notaActual.getId());
             s.execute();
         } catch (SQLException ex) {
             SistemaAlerta.alerta("Error a la desvinculació d'etiqueta");
@@ -470,20 +468,16 @@ public class Model {
 
     }
 
-    public ObservableList<Nota> filtrarNotes(Connection c, String nomEtiqueta) {
+    public ObservableList<Nota> filtrarNotes(Connection c, Etiqueta etiqueta) {
         ObservableList<Nota> notes = FXCollections.observableArrayList();
         PreparedStatement s;
         try {
 
-            s = c.prepareStatement("SELECT notes.id_nota, titol, contingut, is_en_edicio, data_modificacio, is_preferida \n"
-                    + "FROM notes \n"
-                    + "INNER JOIN notes_usuaris ON notes.id_nota = notes_usuaris.id_nota \n"
-                    + "INNER JOIN notes_etiquetes ON notes.id_nota = notes_etiquetes.id_nota \n"
-                    + "INNER JOIN etiquetes ON notes_etiquetes.id_etiqueta = etiquetes.id_etiqueta \n"
-                    + "WHERE notes_usuaris.id_usuari = ? AND etiquetes.nom_etiqueta = ?");
+            s = c.prepareStatement("SELECT notes.id_nota, titol, contingut, is_en_edicio, data_modificacio, is_preferida FROM notes INNER JOIN notes_usuaris ON notes.id_nota = notes_usuaris.id_nota\n" +
+"INNER JOIN notes_etiquetes ON notes.id_nota = notes_etiquetes.id_nota WHERE notes_usuaris.id_usuari = ? AND notes_etiquetes.id_etiqueta = ?");
 
             s.setInt(1, id_usuari);
-            s.setString(2, nomEtiqueta);
+            s.setInt(2, etiqueta.getIdEtiqueta());
             ResultSet resultat = s.executeQuery();
             while (resultat.next()) {
                 Nota notaTupla = new Nota(resultat.getInt("id_nota"), resultat.getString("titol"), resultat.getString("contingut"), resultat.getBoolean("is_en_edicio"), resultat.getTimestamp("data_modificacio").toLocalDateTime(), resultat.getBoolean("is_preferida"));
@@ -492,7 +486,7 @@ public class Model {
             return notes;
 
         } catch (Exception ex) {
-            SistemaAlerta.alerta("Error al filtrat de notes");
+            SistemaAlerta.alerta("Error al filtrat de notes:"+ex.getMessage());
             return notes;
         }
 
