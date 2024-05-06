@@ -36,13 +36,13 @@
           </Tab>
         </tabs>
       </TabPane>
-      <Button layoutX="373.0" layoutY="200.0" mnemonicParsing="false" onAction="#afegirNota" prefHeight="50.0" prefWidth="164.0" text="Afegir Nota" AnchorPane.bottomAnchor="289.6" AnchorPane.rightAnchor="183.0" />
-      <Button fx:id="botoEsborrar" layoutX="373.0" layoutY="309.0" mnemonicParsing="false" onAction="#esborrarNotes" prefHeight="30.0" prefWidth="164.0" style="-fx-background-color: red;" text="Esborrar Nota" AnchorPane.bottomAnchor="200.6" AnchorPane.rightAnchor="183.0" />
-      <Button fx:id="botoModificar" layoutX="373.0" layoutY="262.0" mnemonicParsing="false" onAction="#editarNota" text="Modificar" AnchorPane.bottomAnchor="248.4" AnchorPane.rightAnchor="268.6" />
-      <Button fx:id="botoCompartir" layoutX="459.0" layoutY="262.0" mnemonicParsing="false" onAction="#compartirNota" text="Compartir" AnchorPane.bottomAnchor="248.80000000000004" AnchorPane.rightAnchor="179.4" />
-      <TextField fx:id="textEtiqueta" layoutX="578.0" layoutY="408.0" prefHeight="31.0" prefWidth="127.0" AnchorPane.bottomAnchor="100.8" AnchorPane.rightAnchor="14.799999999999997" />
-      <Button layoutX="578.0" layoutY="457.0" mnemonicParsing="false" onAction="#crearEtiqueta" prefHeight="30.0" prefWidth="127.0" text="Crear etiqueta" AnchorPane.bottomAnchor="52.6" AnchorPane.rightAnchor="14.799999999999997" />
-      <Button layoutX="578.0" layoutY="495.0" mnemonicParsing="false" onAction="#eliminarEtiqueta" prefHeight="30.0" prefWidth="127.0" text="Esborrar etiqueta" AnchorPane.bottomAnchor="14.600000000000001" AnchorPane.rightAnchor="14.40000000000002" />
+      <Button layoutX="373.0" layoutY="200.0" mnemonicParsing="false" onAction="#afegirNota" prefHeight="50.0" prefWidth="176.0" text="Afegir Nota" AnchorPane.bottomAnchor="290.0" AnchorPane.rightAnchor="171.0" />
+      <Button fx:id="botoEsborrar" layoutX="373.0" layoutY="309.0" mnemonicParsing="false" onAction="#esborrarNotes" prefHeight="30.0" prefWidth="176.0" style="-fx-background-color: red;" text="Esborrar Nota" AnchorPane.bottomAnchor="201.0" AnchorPane.rightAnchor="171.0" />
+      <Button fx:id="botoModificar" layoutX="374.0" layoutY="264.0" mnemonicParsing="false" onAction="#editarNota" text="Modificar" AnchorPane.bottomAnchor="248.0" AnchorPane.rightAnchor="263.0" />
+      <Button fx:id="botoCompartir" layoutX="461.0" layoutY="264.0" mnemonicParsing="false" onAction="#compartirNota" text="Compartir" AnchorPane.bottomAnchor="248.0" AnchorPane.rightAnchor="170.0" />
+      <TextField fx:id="textEtiqueta" layoutX="578.0" layoutY="408.0" prefHeight="31.0" prefWidth="141.0" promptText="Nom d'etiqueta" AnchorPane.bottomAnchor="101.0" AnchorPane.rightAnchor="15.0" />
+      <Button layoutX="578.0" layoutY="457.0" mnemonicParsing="false" onAction="#crearEtiqueta" prefHeight="30.0" prefWidth="141.0" text="Crear etiqueta" AnchorPane.bottomAnchor="53.0" AnchorPane.rightAnchor="15.0" />
+      <Button layoutX="578.0" layoutY="495.0" mnemonicParsing="false" onAction="#eliminarEtiqueta" prefHeight="30.0" prefWidth="141.0" text="Eliminar etiqueta" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="14.0" />
       <Button fx:id="botoFiltrar" layoutX="550.0" layoutY="29.0" mnemonicParsing="false" onAction="#filtrarEtiqueta" prefHeight="30.0" prefWidth="78.0" text="Filtrar" AnchorPane.rightAnchor="92.0" />
       <ComboBox fx:id="comboBoxFiltre" layoutX="374.0" layoutY="31.0" prefHeight="26.0" prefWidth="164.0" promptText="Selecció etiqueta" AnchorPane.rightAnchor="182.0" />
       <Button fx:id="botoNetejar" layoutX="642.0" layoutY="29.0" mnemonicParsing="false" onAction="#actualitzarLlistes" prefHeight="30.0" prefWidth="78.0" text="Netejar" AnchorPane.rightAnchor="0.0" />

@@ -15,31 +15,33 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 public class PrimaryController {
-    Connexio connexio = new Connexio();
+    Connexio connexio = new Connexio();//La connexió a MySQL
     Model model;
     
+    //Variables registre
     @FXML
-    TextField regNom;
+    TextField regNom;//El nom d'usuari
     @FXML
-    TextField regCorreu;
+    TextField regCorreu;//Correu
     @FXML
-    PasswordField regContrasenya;
+    PasswordField regContrasenya;//Contrasenya
+    //Variables inici sessió
+    @FXML
+    TextField inCorreu;//Correu
+    @FXML
+    PasswordField inContrasenya;//Contrasenya
     
-    @FXML
-    TextField inCorreu;
-    @FXML
-    PasswordField inContrasenya;
-    
+    //Injecció del model 
     public void injecta(Model model){
         this.model = model;
     }
     
     
-    @FXML
-    private void initialize(){
-       
-    }
-    
+    /**
+     * El mètode registrar-se crida el mètode d'InsertarUsuari del model amb les dades dels textField i passwordField i emmagatzema el resultat el forma de int
+     * depenent del resultat, s'inicia sessió(model.ComprovarUsuari) i es mostra un missatge  de registre correcte i s'assigna al model la id de l'usuari, mostra missatge d'error de bases de dades si
+     * no hi ha connexió o mostra un missatge si les credencials no són vàlides
+     */
     @FXML
     public void registrarse(){
         
@@ -62,6 +64,13 @@ public class PrimaryController {
         }
     }
     
+    
+    /**
+     * El mètode iniciar sessió crida el mètode de ComprovarUsuari del model amb les dades dels textField i passwordField 
+     * i emmagatzema el resultat el forma de int
+     * depenent del resultat, es mostra un missatge d'inici de sessió correcte i s'assigna l'id d'usuari al model, mostra
+     * un missatge d'error de connexió amb el servidor de bases de dades o mostra un missatge de credencials invàlides
+     */
     @FXML
     public void iniciarSessio(){
         int idSessio = model.ComprovarUsuari(connexio.connecta(), inCorreu.getText(), inContrasenya.getText());
@@ -73,14 +82,16 @@ public class PrimaryController {
             if (idSessio == 0) {
                 SistemaAlerta.alerta("Error de connexió amb el servidor de Bases de Dades!");
             }else{
-                SistemaAlerta.alerta("Correu o contrasenya incorrectes!\n Recorda, la contrasenya ha de tenir més de 8 caràcters");
+                SistemaAlerta.alerta("Correu o contrasenya incorrectes!");
             }
         }
     }
     
     
     
-    
+    /**
+     * El mètode de canviar pantalla crida a App per canviar la pantalla
+     */
     @FXML
     private void canviarPantalla(){
         try {
