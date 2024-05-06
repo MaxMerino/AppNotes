@@ -4,7 +4,6 @@
  */
 package com.maxmerino.appnotes_maxmerino.model;
 
-import com.maxmerino.appnotes_maxmerino.SistemaAlerta;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;

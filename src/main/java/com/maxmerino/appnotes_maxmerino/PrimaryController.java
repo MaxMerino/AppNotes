@@ -1,5 +1,6 @@
 package com.maxmerino.appnotes_maxmerino;
 
+import com.maxmerino.appnotes_maxmerino.model.SistemaAlerta;
 import com.maxmerino.appnotes_maxmerino.model.Connexio;
 import com.maxmerino.appnotes_maxmerino.model.Model;
 import java.io.IOException;

@@ -5,7 +5,6 @@
 package com.maxmerino.appnotes_maxmerino.model;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
-import com.maxmerino.appnotes_maxmerino.SistemaAlerta;
 import java.sql.Connection;
 
 import java.sql.PreparedStatement;
