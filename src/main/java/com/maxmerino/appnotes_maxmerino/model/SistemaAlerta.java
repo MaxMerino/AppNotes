@@ -15,6 +15,10 @@ import javafx.stage.Stage;
  */
 public class SistemaAlerta {
     
+    /**
+     * El mètode d'alerta fa aparèixer en pantalla un popup amb el paràmetre text com informació
+     * @param text 
+     */
     @FXML
     public static void alerta(String text){
         Alert alerta = new Alert(Alert.AlertType.INFORMATION);
@@ -25,7 +29,13 @@ public class SistemaAlerta {
         stage.setAlwaysOnTop(true);
         alerta.show();
     }
-    
+    /**
+     * El mètode d'alertaConfirmació fa aparèixer en pantalla un popup amb el paràmetre text com informació
+     * i retorna en forma de booleà si s'ha clicat "Si"
+     * @param text
+     * @return Retorna si s'ha clicat "Sí"
+     */
+    @FXML
     public static boolean alertaConfirmacio(String text) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText(null);

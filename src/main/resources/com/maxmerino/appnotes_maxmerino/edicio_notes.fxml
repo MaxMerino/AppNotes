@@ -17,10 +17,10 @@
       <Button layoutX="541.0" layoutY="197.0" mnemonicParsing="false" onAction="#sortirEdicio" text="Cancel·lar" AnchorPane.rightAnchor="99.8" />
       <Button layoutX="546.0" layoutY="159.0" mnemonicParsing="false" onAction="#guardar" text="Guardar" AnchorPane.rightAnchor="104.4" />
       <CheckBox fx:id="checkboxPreferida" layoutX="529.0" layoutY="21.0" mnemonicParsing="false" text="Afegir a Notes Preferides" AnchorPane.rightAnchor="35.80000000000001" AnchorPane.topAnchor="21.0" />
-      <ComboBox fx:id="comboBoxEtiquetes" layoutX="506.0" layoutY="306.0" prefHeight="26.0" prefWidth="170.0" promptText="Selecciona una etiqueta" AnchorPane.rightAnchor="43.599999999999994" />
+      <ComboBox fx:id="comboBoxEtiquetes" layoutX="506.0" layoutY="306.0" prefHeight="26.0" prefWidth="170.0" promptText="Selecció etiqueta" AnchorPane.rightAnchor="43.599999999999994" />
       <ListView fx:id="llistaEtiquetes" layoutX="14.0" layoutY="483.0" orientation="HORIZONTAL" prefHeight="39.0" prefWidth="470.0" AnchorPane.bottomAnchor="17.799999999999997" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="235.20000000000005" />
       <Button fx:id="botoAfegirEtiqueta" layoutX="529.0" layoutY="339.0" mnemonicParsing="false" onAction="#vincularEtiqueta" text="Vincular Etiqueta" AnchorPane.rightAnchor="67.0" />
-      <Button fx:id="botoEsborrarEtiqueta" layoutX="495.0" layoutY="489.0" mnemonicParsing="false" onAction="#desvincularEtiqueta" text="Esborrar Etiqueta" AnchorPane.bottomAnchor="23.0" AnchorPane.rightAnchor="84.0" />
+      <Button fx:id="botoEsborrarEtiqueta" layoutX="495.0" layoutY="489.0" mnemonicParsing="false" onAction="#desvincularEtiqueta" style="-fx-background-color: red;" text="Esborrar Etiqueta" AnchorPane.bottomAnchor="23.0" AnchorPane.rightAnchor="84.0" />
       <Label layoutX="213.0" layoutY="455.0" text="Etiquetes" AnchorPane.bottomAnchor="57.8" AnchorPane.leftAnchor="213.0">
          <font>
             <Font size="18.0" />

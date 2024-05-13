@@ -18,22 +18,25 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class EdicioNotesController {
-    Connexio connexio = new Connexio();
+    Connexio connexio = new Connexio();//La connexió a MySQL
     Model model;
     Stage stage;
+    //Injecció del model 
     public void injecta(Model model){
         this.model = model;
     }
+    //Injecció de l'Stage 
     public void injectaStage(Stage stage){
         this.stage = stage;
     }
-    
+    Nota notaActual; 
+    //Elements del fxml
     @FXML
     TextField titol;
     @FXML
     TextArea contingut;
     
-    Nota notaActual; 
+    
     
     @FXML
     CheckBox checkboxPreferida;
@@ -46,6 +49,10 @@ public class EdicioNotesController {
     @FXML
     ListView llistaEtiquetes;
     
+    /**
+     * Quan s'inicia la pantalla es recull la nota actual, es canvia l'estat d'edicio de la nota actual a true, s'assignen les dades de la nota de text, contingut i preferit.
+     * També es vinculen les etiquetes i es fa que els botons d'afegir i esborrar etiquetes només estiguin actius quan hi ha selecció. 
+    */
     @FXML
     public void initialize(){
         notaActual = model.getNotaActual();
@@ -60,7 +67,9 @@ public class EdicioNotesController {
         stage.setOnCloseRequest(event -> canviarEdicio());
         actualitzarEtiquetes();
     }
-    
+    /**
+     * El mètode comprova si les dades han canviat i són vàlides i modifica la nota i surt d'edició
+     */
     @FXML
     public void guardar(){
         if (canviarDades()) {
@@ -70,7 +79,12 @@ public class EdicioNotesController {
 
         
     }
-    
+    /**
+     * El mètode comprova si la longitud del títol supera 50 caràcters i del contingut supera 2048 caràcters. 
+     * Si ho fan, mostra una alerta per tallar el text. 
+     * Si l'usuari confirma, talla el text a la longitud màxima. 
+     * Finalment, actualitza les dades de la nota i retorna true si es fan canvis, sinó false
+     */
     private boolean canviarDades(){
         boolean textRetallat = false;
         
@@ -107,6 +121,9 @@ public class EdicioNotesController {
         
     }
     
+    /**
+     * El mètode canvia l'estat d'edició a fals i torna a la pantalla secundària
+     */
     @FXML
     public void sortirEdicio(){
         model.canviarEstatEdicio(connexio.connecta(), false, notaActual.getId());
@@ -117,17 +134,26 @@ public class EdicioNotesController {
         }
     }
     
+    /**
+     * Actualitza el listview i combobox de etiquetes
+     */
     @FXML
     private void actualitzarEtiquetes(){
         comboBoxEtiquetes.setItems(model.visualitzarEtiquetesNoVinculades(connexio.connecta()));
         llistaEtiquetes.setItems(model.visualitzarEtiquetesNota(connexio.connecta()));
         
     }
+    /**
+     * El mètode vincula una etiqueta a la nota actual
+     */
     @FXML
     private void vincularEtiqueta(){
         model.vincularEtiqueta(connexio.connecta(), (Etiqueta)comboBoxEtiquetes.getSelectionModel().getSelectedItem());
         actualitzarEtiquetes();
     }
+    /**
+     * El mètode desvincula una etiqueta a la nota actual
+     */
     @FXML
     private void desvincularEtiqueta(){
         model.desvincularEtiqueta(connexio.connecta(), (Etiqueta)llistaEtiquetes.getSelectionModel().getSelectedItem());

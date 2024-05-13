@@ -13,13 +13,15 @@ import java.io.IOException;
  * JavaFX App
  */
 public class App extends Application {
-
-    private static Scene scene;
-    private static Model model;
+    
+    private static Scene scene;//Escena
+    private static Model model;//Model de totes les pantalles
+    //Controladors
     private static PrimaryController controlador1;
     private static SecondaryController controlador2;
     private static EdicioNotesController controlador3;
     private static CompartirController controlador4;
+    //Es crea el model i els controladors, s'injecta la instància del model a tots els controladors
     @Override
     public void start(Stage stage) throws IOException {
         model = new Model();
@@ -40,7 +42,7 @@ public class App extends Application {
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
-
+    //Càrrega dels FXML
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         if (fxml.equals("primary")) {

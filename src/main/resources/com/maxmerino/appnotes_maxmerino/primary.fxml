@@ -8,14 +8,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="720.0" style="-fx-background-color: #FFF;" stylesheets="@estils/estil.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.maxmerino.appnotes_maxmerino.PrimaryController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="720.0" style="-fx-background-color: #FFF;" stylesheets="@estils/estil.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.maxmerino.appnotes_maxmerino.PrimaryController">
    <children>
-      <Label layoutX="298.0" layoutY="150.0" text="Benvingut!">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
-      <VBox alignment="CENTER" layoutX="91.0" layoutY="257.0" prefHeight="200.0" prefWidth="200.0">
+      <VBox alignment="CENTER" layoutX="91.0" layoutY="257.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="83.0" AnchorPane.leftAnchor="91.0">
          <children>
             <Label text="Registrar-se">
                <font>
@@ -25,10 +20,10 @@
             <TextField fx:id="regNom" promptText="Nom Usuari" />
             <TextField fx:id="regCorreu" promptText="Correu Electrònic" />
             <PasswordField fx:id="regContrasenya" promptText="Contrasenya" />
-            <Button mnemonicParsing="false" onAction="#registrarse" text="Entrar" />
+            <Button mnemonicParsing="false" onAction="#registrarse" text="Registrar-se" />
          </children>
       </VBox>
-      <VBox alignment="TOP_CENTER" layoutX="423.0" layoutY="287.0" prefHeight="200.0" prefWidth="207.0">
+      <VBox alignment="TOP_CENTER" layoutX="423.0" layoutY="287.0" prefHeight="200.0" prefWidth="207.0" AnchorPane.bottomAnchor="53.0" AnchorPane.rightAnchor="89.80000000000001">
          <children>
             <Label text="Iniciar Sessió">
                <font>
@@ -37,8 +32,13 @@
             </Label>
             <TextField fx:id="inCorreu" promptText="Correu Electrònic" />
             <PasswordField fx:id="inContrasenya" promptText="Contrasenya" />
-            <Button mnemonicParsing="false" onAction="#iniciarSessio" text="Entrar" />
+            <Button mnemonicParsing="false" onAction="#iniciarSessio" text="Iniciar Sessió" />
          </children>
       </VBox>
+      <Label layoutX="252.0" layoutY="169.0" text="Benvingut a PrenNota!">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

@@ -17,26 +17,32 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 public class CompartirController {
+    //Objecte de classe Connexio
     Connexio connexio = new Connexio();
     Model model;
     
     
-    
+    //Injecció del model
     public void injecta(Model model){
         this.model = model;
     }
-    
+    //Elements del fxml
     @FXML
     TextField textFieldBuscar;
     @FXML
     ListView llistaResultats;
     @FXML
     Button botoCompartir;
-            
+    /**
+     * Quan la pantalla inicia la propietat de desactivat del botó de compartir es vincula amb si hi ha selecció al listView de resultats
+     */       
     @FXML
     private void initialize(){
        botoCompartir.disableProperty().bind(llistaResultats.getSelectionModel().selectedItemProperty().isNull());
     }
+    /**
+     * El mètode de buscar comprova que la longitud del text a buscar no sigui buit i assigna al listview el resultat del mètode del model de recollirLlistaUsuaris
+     */
     @FXML
     private void buscar(){
         if (textFieldBuscar.getText().length() > 0) {
@@ -44,13 +50,18 @@ public class CompartirController {
         }
         
     }
+    /**
+     * El mètode de compartir crida el mètode del model per compartirNota i canvia la pantalla
+     */
     @FXML
     private void compartir(){
         model.compartirNota(connexio.connecta(), (Usuari)llistaResultats.getSelectionModel().getSelectedItem());
         canviarPantalla();
     }
     
-    
+    /**
+     * El mètode canvia a la pantalla secundària
+     */
     @FXML
     private void canviarPantalla(){
         try {

@@ -16,15 +16,18 @@ import java.sql.SQLException;
 public class Connexio {
     private final String URL = "jdbc:mysql://localhost/bd_blocnotes";//nom bd 
 
-    private final String DRIVER = "com.mysql.cj.jdbc.Driver";
-    private final String USER = "worker";
-    private final String PASSWD = "worker";   
+    private final String DRIVER = "com.mysql.cj.jdbc.Driver";//El driver de la bd
+    private final String USER = "worker";//Nom d'usuari
+    private final String PASSWD = "worker";//Contrasenya   
    
-
+    /**
+     * El mètode es connecta a la base de dades amb les credencials i dades anteriors
+     * @return Retorna una connexió sql (Connection)
+     */
     public Connection connecta() {
         Connection connexio = null;
         try {
-            //Carreguem el driver          
+                     
             Class.forName(DRIVER); 
             connexio = DriverManager.getConnection(URL, USER, PASSWD); 
         } catch (SQLException | ClassNotFoundException throwables) {
